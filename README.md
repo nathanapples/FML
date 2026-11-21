@@ -4,6 +4,16 @@ A small web app for running a fantasy league on top of Jelle's Marble Runs' Marb
 
 It runs as one container with a SQLite database in a volume, and everything is managed from a password-protected admin area.
 
+![Standings](docs/screenshots/standings.webp)
+
+## AI DISCLOSURE
+
+THIS IS VIBE CODED. I DO NOT RECOMMEND ANYONE EXPOSE THIS TO THE INTERNET DIRECTLY. Put it behind an authentication page (for example Cloudflare Access) if anyone outside your network needs to see it.
+
+Although this is publicly listed, this is for my personal use. Given that this is vibe coded and it's for my personal use, I make no promises things will be fixed. All that said it works pretty well for me and my league.
+
+FML is a fan project and isn't affiliated with or endorsed by Jelle's Marble Runs.
+
 ## Install
 
 ```yaml
@@ -41,7 +51,7 @@ The image is built by GitHub Actions on every push to main and published to `ghc
 
 Everything FML keeps lives in `/config`: `fml.db` and the `flags/` folder.
 
-The public pages are read-only; anything that changes data sits behind the admin password. If you expose FML to the internet, put it behind HTTPS (Caddy, Nginx Proxy Manager, Cloudflare Tunnel) and set `COOKIE_SECURE=true`.
+The public pages are read-only; anything that changes data sits behind the admin password. If you serve it over HTTPS, set `COOKIE_SECURE=true`.
 
 ## Using it
 
@@ -67,8 +77,16 @@ npm install
 ADMIN_PASSWORD=dev npm run dev
 ```
 
-Data goes to `./data`. Stack: Next.js (App Router, server actions), React, Tailwind CSS, Recharts and better-sqlite3.
+Data goes to `./data`.
 
 ## Bringing in an existing league
 
 Admin, Seasons and backup, Restore accepts either a full FML backup (replaces everything, flags included) or a single season file in the format of [`seed/season-demo.json`](seed/season-demo.json), which is added alongside your other seasons.
+
+## Credits
+
+Built with Next.js, React, Tailwind CSS, Recharts and better-sqlite3. Marble League, its teams and its events belong to [Jelle's Marble Runs](https://jellesmarbleruns.com/).
+
+## License
+
+[GNU GPLv3](LICENSE)
