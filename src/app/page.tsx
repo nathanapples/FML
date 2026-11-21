@@ -80,7 +80,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
           </div>
         </section>
 
-        {lastEvent && (
+        {lastEvent && lastEvent.counts && (
           <section className="mt-14 grid gap-8 md:grid-cols-[1fr_1fr]">
             <div>
               <h2 className="font-display text-3xl font-bold tracking-tight">{lastEvent.name} podium</h2>

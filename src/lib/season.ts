@@ -2,7 +2,7 @@ import { db, DEFAULT_POINTS } from "./db";
 
 export type Marble = { id: number; code: string; name: string; color: string; color2: string | null; flag: string | null; wikiLink: string | null };
 export type SeasonRow = { id: number; year: number; name: string; eventCount: number; slotsPerTeam: number; pointsTable: number[]; isCurrent: boolean };
-export type EventInfo = { id: number; no: number; name: string; date: string | null; wikiLink: string | null; videoLink: string | null; completed: boolean };
+export type EventInfo = { id: number; no: number; name: string; date: string | null; wikiLink: string | null; videoLink: string | null; completed: boolean; counts: boolean };
 export type Pick = { id: number; slot: number; marbleId: number; startEvent: number };
 export type SlotScore = { slot: number; marble: Marble | null; points: number };
 export type TeamEvent = { eventNo: number; slots: SlotScore[]; total: number; running: number; rank: number };
@@ -118,6 +118,7 @@ export function loadSeason(season: SeasonRow): SeasonData {
     wikiLink: (e.wiki_link as string) || null,
     videoLink: (e.video_link as string) || null,
     completed: (results.get(e.event_no as number)?.length ?? 0) > 0,
+    counts: e.counts !== 0,
   }));
   const completed = events.filter((e) => e.completed);
   const lastEvent = completed[completed.length - 1] ?? null;
@@ -138,7 +139,7 @@ export function loadSeason(season: SeasonRow): SeasonData {
       const slots: SlotScore[] = [];
       for (let s = 1; s <= season.slotsPerTeam; s++) {
         const p = activeFor(s, e.no);
-        slots.push({ slot: s, marble: p ? marbles.get(p.marbleId) ?? null : null, points: e.completed ? pts(e.no, p?.marbleId) : 0 });
+        slots.push({ slot: s, marble: p ? marbles.get(p.marbleId) ?? null : null, points: e.completed && e.counts ? pts(e.no, p?.marbleId) : 0 });
       }
       const total = slots.reduce((a, b) => a + b.points, 0);
       running += total;
@@ -161,7 +162,7 @@ export function loadSeason(season: SeasonRow): SeasonData {
       total: running,
       rank: 0,
       prevRank: null,
-      lastEventPoints: lastEvent ? evs.find((x) => x.eventNo === lastEvent.no)!.total : null,
+      lastEventPoints: lastEvent?.counts ? evs.find((x) => x.eventNo === lastEvent.no)!.total : null,
       gap: 0,
       color: TEAM_PALETTE[i % TEAM_PALETTE.length],
     };
@@ -212,9 +213,9 @@ export function loadSeason(season: SeasonRow): SeasonData {
   for (const t of teams)
     for (const e of t.events) {
       const ev = events.find((x) => x.no === e.eventNo)!;
-      if (ev.completed && (!bestHaul || e.total > bestHaul.points)) bestHaul = { team: t, event: ev, points: e.total };
+      if (ev.completed && ev.counts && (!bestHaul || e.total > bestHaul.points)) bestHaul = { team: t, event: ev, points: e.total };
     }
-  const lastTop = lastEvent
+  const lastTop = lastEvent?.counts
     ? (() => {
         const max = Math.max(...teams.map((t) => t.lastEventPoints ?? 0));
         return teams.filter((t) => t.lastEventPoints === max).map((t) => ({ team: t, points: max }));

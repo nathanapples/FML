@@ -86,12 +86,12 @@ export default async function TeamPage({ params, searchParams }: { params: Promi
                       </td>
                       {e.slots.map((s) => (
                         <td key={s.slot} className="px-3 py-2">
-                          <span className="flex items-center gap-2"><Marble m={s.marble} size={18} /><span className="num w-6">{ev.completed ? s.points : ""}</span></span>
+                          <span className="flex items-center gap-2"><Marble m={s.marble} size={18} /><span className="num w-6">{ev.completed && ev.counts ? s.points : ""}</span></span>
                         </td>
                       ))}
-                      <td className="num px-3 py-2 text-right text-lg font-semibold">{ev.completed ? e.total : ""}</td>
+                      <td className="num px-3 py-2 text-right text-lg font-semibold">{ev.completed ? (ev.counts ? e.total : <span className="font-sans text-sm font-normal text-ink-faint">Not counted</span>) : ""}</td>
                       <td className="hidden px-3 py-2 md:table-cell">
-                        {ev.completed && <span className="block h-2 rounded-full bg-blueline/80" style={{ width: `${(e.total / maxEv) * 100}%` }} />}
+                        {ev.completed && ev.counts && <span className="block h-2 rounded-full bg-blueline/80" style={{ width: `${(e.total / maxEv) * 100}%` }} />}
                       </td>
                       <td className="num px-3 py-2 text-right text-lg font-bold">{ev.completed ? e.running : ""}</td>
                       <td className="num px-4 py-2 text-right text-lg">{ev.completed ? e.rank : ""}</td>

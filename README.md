@@ -61,14 +61,14 @@ The public pages are read-only; anything that changes data sits behind the admin
 - **Team pages** (`/teams/:id`): slots, trade history and an event-by-event breakdown.
 - **Admin** (`/admin`):
   - *Results*: tap marble teams in finishing order. Points come from the season's points table (25, 20, 15, 12 … 0 by default) and any of them can be edited.
-  - *Events*: names, dates, wiki and video links.
+  - *Events*: names, dates, wiki and video links, and whether each event counts toward league standings (untick it for races held before your draft).
   - *League teams*: names, managers, flags, draft order, picks and trades. A trade is "this slot holds this marble from event N".
   - *Marble teams*: colours (the marble is drawn from these), optional logo, wiki link, and which teams are competing this season.
   - *Seasons and backup*: start a new season (optionally carrying over marble teams and managers), change the points table, download a full JSON backup, or restore one.
 
 ## How scoring works
 
-For each event, a slot is held by the pick with the highest `startEvent` that is less than or equal to the event number. The slot earns that marble team's points for the event. A league team's event total is the sum of its slots; positions use competition ranking, so ties share a place.
+Events marked as not counting give every league team 0 points. For every other event, a slot is held by the pick with the highest `startEvent` that is less than or equal to the event number. The slot earns that marble team's points for the event. A league team's event total is the sum of its slots; positions use competition ranking, so ties share a place.
 
 ## Development
 

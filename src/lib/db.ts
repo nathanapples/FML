@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS events (
   date TEXT,
   wiki_link TEXT,
   video_link TEXT,
+  counts INTEGER NOT NULL DEFAULT 1,
   UNIQUE (season_id, event_no)
 );
 CREATE TABLE IF NOT EXISTS results (
@@ -80,11 +81,18 @@ export function db(): Database.Database {
   d.pragma("journal_mode = WAL");
   d.pragma("foreign_keys = ON");
   d.exec(SCHEMA);
+  migrate(d);
   globalThis.__fmlDb = d;
   const count = (d.prepare("SELECT COUNT(*) c FROM seasons").get() as { c: number }).c;
   const seeded = d.prepare("SELECT value FROM settings WHERE key='seeded'").get();
   if (count === 0 && !seeded && process.env.SEED !== "false") seed(d);
   return d;
+}
+
+/** Adds columns introduced after a database was first created. */
+function migrate(d: Database.Database) {
+  const cols = (d.prepare("PRAGMA table_info(events)").all() as { name: string }[]).map((c) => c.name);
+  if (!cols.includes("counts")) d.exec("ALTER TABLE events ADD COLUMN counts INTEGER NOT NULL DEFAULT 1");
 }
 
 export function getSetting(key: string, fallback = ""): string {
@@ -105,7 +113,7 @@ export type SeasonFile = {
   pointsTable: number[];
   isCurrent?: boolean;
   marbleTeams: { code: string; name: string; color: string; color2?: string | null; wikiLink?: string | null; flag?: string | null; competing: boolean }[];
-  events: { eventNo: number; name: string; date?: string | null; wikiLink?: string | null; videoLink?: string | null }[];
+  events: { eventNo: number; name: string; date?: string | null; wikiLink?: string | null; videoLink?: string | null; counts?: boolean }[];
   results: Record<string, Record<string, number | { points: number; placement?: number | null }>>;
   leagueTeams: { teamName: string; manager: string; draftOrder?: number | null; flag?: string | null; slots: { code: string; startEvent: number }[][] }[];
 };
@@ -131,8 +139,8 @@ export function importSeason(d: Database.Database, s: SeasonFile): number {
     const evIds: Record<number, number> = {};
     for (const e of s.events) {
       evIds[e.eventNo] = Number(
-        d.prepare("INSERT INTO events(season_id,event_no,name,date,wiki_link,video_link) VALUES(?,?,?,?,?,?)")
-          .run(seasonId, e.eventNo, e.name, e.date ?? null, e.wikiLink ?? null, e.videoLink ?? null).lastInsertRowid
+        d.prepare("INSERT INTO events(season_id,event_no,name,date,wiki_link,video_link,counts) VALUES(?,?,?,?,?,?,?)")
+          .run(seasonId, e.eventNo, e.name, e.date ?? null, e.wikiLink ?? null, e.videoLink ?? null, e.counts === false ? 0 : 1).lastInsertRowid
       );
     }
     for (const [eventNo, byCode] of Object.entries(s.results)) {

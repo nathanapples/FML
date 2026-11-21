@@ -36,6 +36,7 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
                         <Marble key={r.marbleId} m={marbles.get(r.marbleId)} size={i === 0 ? 30 : 22} title={`${i + 1}. ${marbles.get(r.marbleId)?.name}`} />
                       ))}
                       <span className="ml-1 truncate text-sm text-ink-soft">{marbles.get(top[0]?.marbleId)?.name} won</span>
+                      {!e.counts && <span className="ml-auto flex-none rounded-full bg-ice px-2 py-0.5 text-xs text-ink-soft" title="This event doesn't count toward league standings">Not counted</span>}
                     </span>
                   ) : (
                     <span className="mt-3 text-sm text-ink-faint">Not raced yet</span>

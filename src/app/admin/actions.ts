@@ -71,8 +71,8 @@ export async function clearResults(f: FormData) {
 
 export async function saveEvent(f: FormData) {
   await requireAdmin();
-  db().prepare("UPDATE events SET name=?, date=?, wiki_link=?, video_link=? WHERE id=?").run(
-    str(f, "name") || "Untitled event", optStr(f, "date"), optStr(f, "wikiLink"), optStr(f, "videoLink"), int(f, "id")
+  db().prepare("UPDATE events SET name=?, date=?, wiki_link=?, video_link=?, counts=? WHERE id=?").run(
+    str(f, "name") || "Untitled event", optStr(f, "date"), optStr(f, "wikiLink"), optStr(f, "videoLink"), f.get("counts") === "on" ? 1 : 0, int(f, "id")
   );
   done();
 }

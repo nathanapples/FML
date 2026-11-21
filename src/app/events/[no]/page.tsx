@@ -66,6 +66,9 @@ export default async function EventPage({ params, searchParams }: { params: Prom
             </section>
             <section>
               <h2 className="mb-3 font-display text-2xl font-bold">League haul</h2>
+              {!ev.counts ? (
+                <p className="rounded-2xl border border-dashed border-frost px-5 py-8 text-ink-soft">This event doesn&apos;t count toward league standings, so no league team scored from it.</p>
+              ) : (
               <ol className="space-y-1.5">
                 {league.map(({ t, e }) => (
                   <li key={t.id}>
@@ -83,6 +86,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
                   </li>
                 ))}
               </ol>
+              )}
             </section>
           </div>
         )}
