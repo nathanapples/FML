@@ -4,6 +4,7 @@ import { AdminShell, NoSeason } from "@/components/admin/AdminShell";
 import { ResultsEditor } from "@/components/admin/ResultsEditor";
 import { Marble } from "@/components/Marble";
 import { fmtDate } from "@/lib/page";
+import { EventPicker } from "@/components/admin/EventPicker";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +17,10 @@ export default async function AdminResults({ searchParams }: { searchParams: Pro
   return (
     <AdminShell active="/admin" season={season} seasons={seasons}>
       <h1 className="font-display text-4xl font-bold">Results</h1>
-      <p className="mb-6 mt-1 text-ink-soft">Pick an event, then enter the finishing order. Standings update as soon as you save.</p>
-      <div className="grid gap-8 md:grid-cols-[14rem_1fr]">
-        <ol className="space-y-1">
+      <p className="mb-5 mt-1 text-ink-soft">Pick an event, then enter the finishing order. Standings update as soon as you save.</p>
+      <div className="grid gap-5 md:grid-cols-[14rem_1fr] md:gap-8 [&>*]:min-w-0">
+        <EventPicker events={data.events.map((e) => ({ no: e.no, name: e.name, done: e.completed }))} current={sel?.no ?? 1} yq={yq} />
+        <ol className="hidden space-y-1 md:block">
           {data.events.map((e) => {
             const w = e.completed ? data.marbles.get(data.results.get(e.no)![0].marbleId) : null;
             return (

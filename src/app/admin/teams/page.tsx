@@ -27,7 +27,7 @@ export default async function AdminTeams({ searchParams }: { searchParams: Promi
   return (
     <AdminShell active="/admin/teams" season={season} seasons={seasons}>
       <h1 className="font-display text-4xl font-bold">League teams</h1>
-      <p className="mb-6 mt-1 text-ink-soft">Everyone playing in {data.season.name}, their draft picks, and any trades.</p>
+      <p className="mb-6 mt-1 text-ink-soft">Everyone playing in {data.season.name}, their draft picks, and any trades. Tap a team to edit it.</p>
 
       <details className="mb-8 rounded-2xl bg-board p-5 open:shadow-sm">
         <summary className="cursor-pointer font-display text-xl font-semibold">Add a team</summary>
@@ -44,16 +44,28 @@ export default async function AdminTeams({ searchParams }: { searchParams: Promi
         </form>
       </details>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         {teams.map((t) => (
-          <section key={t.id} className="rounded-2xl bg-board p-5">
+          <details key={t.id} className="group rounded-2xl bg-board open:shadow-sm">
+            <summary className="flex cursor-pointer list-none items-center gap-3 p-4 [&::-webkit-details-marker]:hidden">
+              <Flag src={t.flag} name={t.name} size={40} />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-semibold">{t.name}</span>
+                <span className="block truncate text-sm text-ink-soft">{t.manager}</span>
+              </span>
+              <span className="flex flex-none items-center gap-1">
+                {t.current.map((m, k) => <Marble key={k} m={m} size={22} />)}
+              </span>
+              <svg className="flex-none text-ink-faint transition-transform group-open:rotate-180" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden><path d="m6 9 6 6 6-6" /></svg>
+            </summary>
+            <div className="border-t border-frost p-4 sm:p-5">
             <form action={saveTeam} className="grid items-end gap-3 md:grid-cols-[auto_1fr_1fr_7rem_auto]">
               <input type="hidden" name="id" value={t.id} />
-              <Flag src={t.flag} name={t.name} size={56} />
+              <Flag src={t.flag} name={t.name} size={56} className="hidden md:block" />
               <label><span className="mb-1 block text-sm text-ink-soft">Team name</span><input name="name" defaultValue={t.name} className="field" required /></label>
               <label><span className="mb-1 block text-sm text-ink-soft">Manager</span><input name="manager" defaultValue={t.manager} className="field" /></label>
               <label><span className="mb-1 block text-sm text-ink-soft">Draft order</span><input name="draftOrder" type="number" min={1} defaultValue={t.draftOrder ?? ""} className="field" /></label>
-              <Submit>Save</Submit>
+              <div className="order-last md:order-none"><Submit>Save</Submit></div>
               <label className="md:col-start-2"><span className="mb-1 block text-sm text-ink-soft">Replace flag</span><input name="flag" type="file" accept="image/*" className="field text-sm" /></label>
               {t.flag && <label className="flex items-center gap-2 self-center pt-5 text-sm text-ink-soft"><input type="checkbox" name="removeFlag" /> Remove flag</label>}
             </form>
@@ -100,7 +112,8 @@ export default async function AdminTeams({ searchParams }: { searchParams: Promi
               <input type="hidden" name="id" value={t.id} />
               <Submit className="text-sm text-ink-faint hover:text-redline" pendingText="Deleting…" confirm={`Delete ${t.name} and all its picks?`}>Delete team</Submit>
             </form>
-          </section>
+            </div>
+          </details>
         ))}
       </div>
     </AdminShell>

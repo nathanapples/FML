@@ -43,7 +43,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
         {!ev.completed ? (
           <p className="mt-12 rounded-2xl border border-dashed border-frost px-6 py-14 text-center text-ink-soft">No results yet. Once this event is raced, an admin can enter the finishing order.</p>
         ) : (
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_1fr]">
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_1fr] [&>section]:min-w-0">
             <section>
               <h2 className="mb-3 font-display text-2xl font-bold">Finishing order</h2>
               <ol className="overflow-hidden rounded-2xl bg-board">

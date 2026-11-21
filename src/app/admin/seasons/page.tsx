@@ -44,7 +44,7 @@ export default async function AdminSeasons({ searchParams }: { searchParams: Pro
                 <span className="text-ink-faint">{s.eventCount} events</span>
                 <details className="ml-auto">
                   <summary className="cursor-pointer text-ink-faint hover:text-redline">Delete season</summary>
-                  <form action={deleteSeason} className="mt-2 flex gap-2">
+                  <form action={deleteSeason} className="mt-2 flex flex-wrap justify-end gap-2">
                     <input type="hidden" name="id" value={s.id} />
                     <input name="confirm" placeholder='Type "delete"' className="field w-36" aria-label="Type delete to confirm" />
                     <Submit className="btn btn-danger" pendingText="Deleting…">Delete {s.year}</Submit>
