@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
+
+  --color-ice: #eef3f6;
+  --color-frost: #dfe8ee;
+  --color-board: #ffffff;
+  --color-ink: #0b2a4a;
+  --color-ink-soft: #4a6380;
+  --color-ink-faint: #8aa0b4;
+  --color-redline: #d7263d;
+  --color-blueline: #1f5fae;
+  --color-gold: #e3a92b;
+  --color-silver: #a3adb8;
+  --color-bronze: #b8693d;
+}
+
+html {
+  background: var(--color-ice);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-blueline);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgb(31 95 174 / 0.2);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.005em;
+}
+
+.num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* The marble: layered gradients over the team colour, with an optional swirl colour. */
+.marble {
+  --c: #8899aa;
+  --c2: transparent;
+  position: relative;
+  display: inline-block;
+  flex: none;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.95) 0 6%, rgb(255 255 255 / 0.35) 14%, transparent 26%),
+    radial-gradient(circle at 70% 78%, rgb(255 255 255 / 0.25), transparent 35%),
+    conic-gradient(from 210deg at 55% 58%, transparent 0 12%, color-mix(in oklab, var(--c2) 80%, transparent) 16% 24%, transparent 30% 58%, color-mix(in oklab, var(--c2) 70%, transparent) 64% 70%, transparent 76%),
+    radial-gradient(circle at 40% 35%, color-mix(in oklab, var(--c) 70%, white) 0%, var(--c) 45%, color-mix(in oklab, var(--c) 60%, black) 100%);
+  box-shadow:
+    inset -0.12em -0.16em 0.3em rgb(0 0 0 / 0.28),
+    inset 0.06em 0.08em 0.12em rgb(255 255 255 / 0.35),
+    0 0.08em 0.14em rgb(11 42 74 / 0.28);
+}
+.marble.has-flag {
+  background-size: cover;
+  background-position: center;
+}
+.marble.has-flag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 6%, rgb(255 255 255 / 0.3) 14%, transparent 26%),
+    radial-gradient(circle at 50% 50%, transparent 55%, rgb(0 0 0 / 0.3) 100%);
+}
+
+/* one orchestrated moment: the leaderboard marbles roll in on first paint */
+@keyframes roll-in {
+  from { transform: translateX(-1.4em) rotate(-200deg); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.roll-in .marble {
+  animation: roll-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1.05) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 120ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .roll-in .marble { animation: none; }
+}
+
+@layer components {
+input, select, textarea {
+  font: inherit;
+}
+.field {
+  width: 100%;
+  border: 1px solid var(--color-frost);
+  background: white;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  color: var(--color-ink);
+}
+.field:focus {
+  outline: 2px solid var(--color-blueline);
+  outline-offset: 0;
+  border-color: transparent;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+  background: var(--color-ink);
+  color: white;
+  cursor: pointer;
+  transition: background 120ms;
+}
+.btn:hover { background: var(--color-blueline); }
+.btn-quiet {
+  background: transparent;
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px var(--color-frost);
+}
+.btn-quiet:hover { background: white; }
+.btn-danger { background: transparent; color: var(--color-redline); box-shadow: inset 0 0 0 1px rgb(215 38 61 / 0.3); }
+.btn-danger:hover { background: rgb(215 38 61 / 0.08); }
+}

@@ -1,0 +1,15 @@
+services:
+  fml:
+    image: ghcr.io/nathanapples/fml:latest
+    container_name: fml
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - ADMIN_PASSWORD=change-me
+      # - SEED=false   # start with an empty league instead of the demo
+    volumes:
+      - ./config:/config
+    ports:
+      - 5076:5076
+    restart: unless-stopped

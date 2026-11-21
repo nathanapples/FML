@@ -1,0 +1,820 @@
+{
+ "year": 2025,
+ "name": "Demo League",
+ "eventCount": 16,
+ "slotsPerTeam": 2,
+ "pointsTable": [
+  25,
+  20,
+  15,
+  12,
+  11,
+  10,
+  9,
+  8,
+  7,
+  6,
+  5,
+  4,
+  3,
+  2,
+  1,
+  0
+ ],
+ "marbleTeams": [
+  {
+   "code": "BB",
+   "name": "Bumblebees",
+   "color": "#F5C518",
+   "color2": "#1A1A1A",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Bumblebees",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "CC",
+   "name": "Crazy Cat's Eyes",
+   "color": "#43B649",
+   "color2": "#E8D33A",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Crazy_Cat's_Eyes",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "MY",
+   "name": "Mellow Yellow",
+   "color": "#F7E04B",
+   "color2": null,
+   "wikiLink": "https://marblebase.com/wiki/mellow_yellow",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "GG",
+   "name": "Gliding Glaciers",
+   "color": "#9BD7F0",
+   "color2": "#FFFFFF",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Gliding_Glaciers",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "MW",
+   "name": "Midnight Wisps",
+   "color": "#C9DDF2",
+   "color2": "#5A6B8C",
+   "wikiLink": "https://marblebase.com/wiki/midnight_wisps",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "OO",
+   "name": "O'rangers",
+   "color": "#F28C28",
+   "color2": null,
+   "wikiLink": "https://marblebase.com/wiki/o'rangers",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "PP",
+   "name": "Pinkies",
+   "color": "#F49AC1",
+   "color2": null,
+   "wikiLink": "https://marblebase.com/wiki/pinkies",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "RR",
+   "name": "Raspberry Racers",
+   "color": "#C2185B",
+   "color2": "#F48FB1",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Raspberry_Racers",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "RO",
+   "name": "Rojo Rollers",
+   "color": "#D32F2F",
+   "color2": null,
+   "wikiLink": "https://marblebase.com/wiki/rojo_rollers",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "SS",
+   "name": "Savage Speeders",
+   "color": "#9B1C31",
+   "color2": "#F2A93B",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Savage_Speeders",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "SW",
+   "name": "Shining Swarm",
+   "color": "#E6C200",
+   "color2": "#6B6B6B",
+   "wikiLink": "https://marblebase.com/wiki/shining_swarm",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "SB",
+   "name": "Snowballs",
+   "color": "#EEF3F8",
+   "color2": "#B9D3EA",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Snowballs",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "TG",
+   "name": "Team Galactic",
+   "color": "#3A2D7A",
+   "color2": "#9EC5FF",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Team_Galactic",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "TM",
+   "name": "Team Momo",
+   "color": "#2E7D32",
+   "color2": "#111111",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Team_Momo",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "TP",
+   "name": "Team Plasma",
+   "color": "#7B3FBF",
+   "color2": "#E3D1FF",
+   "wikiLink": "https://marblebase.com/wiki/team_plasma",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "TB",
+   "name": "Thunderbolts",
+   "color": "#1E5AA8",
+   "color2": "#FFE14D",
+   "wikiLink": "https://marblebase.com/wiki/thunderbolts",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "BC",
+   "name": "Balls of Chaos",
+   "color": "#E0508C",
+   "color2": "#3FB6E8",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Balls_of_Chaos",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "BJ",
+   "name": "Black Jacks",
+   "color": "#222831",
+   "color2": "#E8E8E8",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Black_Jacks",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "CH",
+   "name": "Chocolatiers",
+   "color": "#6B4226",
+   "color2": "#C69C6D",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Chocolatiers",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "GD",
+   "name": "Green Ducks",
+   "color": "#4E8A3E",
+   "color2": "#F2C14E",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Green_Ducks",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "HA",
+   "name": "Hazers",
+   "color": "#9AA3A8",
+   "color2": "#DDE2E5",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Hazers",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "HT",
+   "name": "Hornets",
+   "color": "#F2B705",
+   "color2": "#1A1A1A",
+   "wikiLink": "https://marblebase.com/wiki/hornets",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "IS",
+   "name": "Indigo Stars",
+   "color": "#3F3D9B",
+   "color2": "#FFFFFF",
+   "wikiLink": "https://marblebase.com/wiki/indigo_stars",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "JB",
+   "name": "Jawbreakers",
+   "color": "#E83E8C",
+   "color2": "#FFD23F",
+   "wikiLink": "https://marblebase.com/wiki/jawbreakers",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "JJ",
+   "name": "Jungle Jumpers",
+   "color": "#7CB342",
+   "color2": "#2E4E1E",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Jungle_Jumpers",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "KB",
+   "name": "Kobalts",
+   "color": "#1F4FBF",
+   "color2": "#9BB5FF",
+   "wikiLink": "https://marblebase.com/wiki/kobalts",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "LM",
+   "name": "Limers",
+   "color": "#A4D65E",
+   "color2": null,
+   "wikiLink": "https://marblebase.com/wiki/limers",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "MM",
+   "name": "Minty Maniacs",
+   "color": "#7FE0C3",
+   "color2": "#FFFFFF",
+   "wikiLink": "https://marblebase.com/wiki/minty_maniacs",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "OC",
+   "name": "Oceanics",
+   "color": "#1597BB",
+   "color2": "#BDEBF7",
+   "wikiLink": "https://marblebase.com/wiki/oceanics",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "PR",
+   "name": "Purple Rockets",
+   "color": "#7A3EB1",
+   "color2": "#FF6F61",
+   "wikiLink": "https://marblebase.com/wiki/purple_rockets",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "QS",
+   "name": "Quicksilvers",
+   "color": "#B8C2CC",
+   "color2": "#FFFFFF",
+   "wikiLink": "https://marblebase.com/wiki/quicksilvers",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "SF",
+   "name": "Solar Flares",
+   "color": "#FF7A1A",
+   "color2": "#FFD23F",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Solar_Flares",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "T1",
+   "name": "Team Primary",
+   "color": "#E53935",
+   "color2": "#1E5AA8",
+   "wikiLink": "https://marblebase.com/wiki/team_primary",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "TS",
+   "name": "Turtle Sliders",
+   "color": "#4C8C4A",
+   "color2": "#C8B273",
+   "wikiLink": "https://marblebase.com/wiki/turtle_sliders",
+   "flag": null,
+   "competing": false
+  },
+  {
+   "code": "WP",
+   "name": "Wolfpack",
+   "color": "#6E7B8B",
+   "color2": "#2F3640",
+   "wikiLink": "https://jellesmarbleruns.fandom.com/wiki/Wolfpack",
+   "flag": null,
+   "competing": true
+  },
+  {
+   "code": "GO",
+   "name": "Golden Orbs",
+   "color": "#D4AF37",
+   "color2": "#FFF1B8",
+   "wikiLink": "https://marblebase.com/wiki/golden_orbs",
+   "flag": null,
+   "competing": false
+  }
+ ],
+ "events": [
+  {
+   "eventNo": 1,
+   "name": "Ice Dash",
+   "date": "2025-01-03",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 2,
+   "name": "Halfpipe",
+   "date": "2025-01-05",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 3,
+   "name": "Bobsled",
+   "date": "2025-01-07",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 4,
+   "name": "Snow Drag",
+   "date": "2025-01-09",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 5,
+   "name": "Biathlon",
+   "date": "2025-01-11",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 6,
+   "name": "Short-track",
+   "date": "2025-01-13",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 7,
+   "name": "Ice Hockey",
+   "date": "2025-01-15",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 8,
+   "name": "Ski Jump",
+   "date": "2025-01-17",
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 9,
+   "name": "Curling",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 10,
+   "name": "Slalom",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 11,
+   "name": "Speed Skating",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 12,
+   "name": "Ice Maze",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 13,
+   "name": "Snowboard Cross",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 14,
+   "name": "Luge",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 15,
+   "name": "Relay",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  },
+  {
+   "eventNo": 16,
+   "name": "Downhill",
+   "date": null,
+   "wikiLink": null,
+   "videoLink": null
+  }
+ ],
+ "results": {
+  "1": {
+   "RR": 25,
+   "TG": 20,
+   "CH": 15,
+   "SF": 12,
+   "BC": 11,
+   "SB": 10,
+   "BB": 9,
+   "JJ": 8,
+   "BJ": 7,
+   "CC": 6,
+   "GD": 5,
+   "TM": 4,
+   "GG": 3,
+   "HA": 2,
+   "SS": 1,
+   "WP": 0
+  },
+  "2": {
+   "BJ": 25,
+   "BC": 20,
+   "SB": 15,
+   "WP": 12,
+   "BB": 11,
+   "TM": 10,
+   "SF": 9,
+   "GD": 8,
+   "TG": 7,
+   "JJ": 6,
+   "GG": 5,
+   "SS": 4,
+   "CH": 3,
+   "RR": 2,
+   "CC": 1,
+   "HA": 0
+  },
+  "3": {
+   "SF": 25,
+   "SB": 20,
+   "WP": 15,
+   "BC": 12,
+   "BJ": 11,
+   "BB": 10,
+   "GG": 9,
+   "CC": 8,
+   "HA": 7,
+   "RR": 6,
+   "GD": 5,
+   "TM": 4,
+   "JJ": 3,
+   "SS": 2,
+   "TG": 1,
+   "CH": 0
+  },
+  "4": {
+   "TG": 25,
+   "GD": 20,
+   "SS": 15,
+   "BC": 12,
+   "BB": 11,
+   "WP": 10,
+   "RR": 9,
+   "BJ": 8,
+   "CH": 7,
+   "HA": 6,
+   "CC": 5,
+   "JJ": 4,
+   "TM": 3,
+   "SB": 2,
+   "SF": 1,
+   "GG": 0
+  },
+  "5": {
+   "SS": 25,
+   "WP": 20,
+   "RR": 15,
+   "CH": 12,
+   "TG": 11,
+   "TM": 10,
+   "HA": 9,
+   "BJ": 8,
+   "GG": 7,
+   "CC": 6,
+   "GD": 5,
+   "SB": 4,
+   "BB": 3,
+   "JJ": 2,
+   "BC": 1,
+   "SF": 0
+  },
+  "6": {
+   "BC": 25,
+   "SB": 20,
+   "TG": 15,
+   "BJ": 12,
+   "WP": 11,
+   "CH": 10,
+   "GG": 9,
+   "SS": 8,
+   "HA": 7,
+   "GD": 6,
+   "JJ": 5,
+   "CC": 4,
+   "SF": 3,
+   "TM": 2,
+   "RR": 1,
+   "BB": 0
+  },
+  "7": {
+   "TM": 25,
+   "SS": 20,
+   "GD": 15,
+   "RR": 12,
+   "CH": 11,
+   "SF": 10,
+   "BJ": 9,
+   "CC": 8,
+   "JJ": 7,
+   "WP": 6,
+   "TG": 5,
+   "BB": 4,
+   "HA": 3,
+   "GG": 2,
+   "BC": 1,
+   "SB": 0
+  },
+  "8": {
+   "GG": 25,
+   "BJ": 20,
+   "SF": 15,
+   "HA": 12,
+   "TG": 11,
+   "TM": 10,
+   "CH": 9,
+   "SS": 8,
+   "JJ": 7,
+   "WP": 6,
+   "GD": 5,
+   "CC": 4,
+   "BC": 3,
+   "BB": 2,
+   "SB": 1,
+   "RR": 0
+  }
+ },
+ "leagueTeams": [
+  {
+   "teamName": "Glass Half Full",
+   "manager": "Alex",
+   "draftOrder": 1,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "CC",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "SF",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Rolling Thunder",
+   "manager": "Sam",
+   "draftOrder": 2,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "SB",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "WP",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Cat's Eye Candy",
+   "manager": "Jordan",
+   "draftOrder": 3,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "TM",
+      "startEvent": 1
+     },
+     {
+      "code": "TG",
+      "startEvent": 6
+     }
+    ],
+    [
+     {
+      "code": "HA",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "The Big Shooters",
+   "manager": "Riley",
+   "draftOrder": 4,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "TM",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "CC",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Taw Talk",
+   "manager": "Morgan",
+   "draftOrder": 5,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "CC",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "JJ",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Agate Expectations",
+   "manager": "Casey",
+   "draftOrder": 6,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "SB",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "CH",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Clearies Forever",
+   "manager": "Jamie",
+   "draftOrder": 7,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "BJ",
+      "startEvent": 1
+     },
+     {
+      "code": "SB",
+      "startEvent": 6
+     }
+    ],
+    [
+     {
+      "code": "TG",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Steelie Dan",
+   "manager": "Taylor",
+   "draftOrder": 8,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "SS",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "BJ",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Knuckle Down",
+   "manager": "Avery",
+   "draftOrder": 9,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "HA",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "BB",
+      "startEvent": 1
+     }
+    ]
+   ]
+  },
+  {
+   "teamName": "Lost My Marbles",
+   "manager": "Quinn",
+   "draftOrder": 10,
+   "flag": null,
+   "slots": [
+    [
+     {
+      "code": "BC",
+      "startEvent": 1
+     }
+    ],
+    [
+     {
+      "code": "BJ",
+      "startEvent": 1
+     }
+    ]
+   ]
+  }
+ ]
+}
