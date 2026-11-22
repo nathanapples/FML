@@ -25,6 +25,10 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
 body {
   min-height: 100dvh;
 }
@@ -49,36 +53,26 @@ body {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* The marble: layered gradients over the team colour, with an optional swirl colour. */
+/* The marble: clear glass with a colour swirl (drawn in Marble.tsx) */
 .marble {
-  --c: #8899aa;
-  --c2: transparent;
   position: relative;
   display: inline-block;
   flex: none;
+  overflow: hidden;
   border-radius: 9999px;
-  background:
-    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.95) 0 6%, rgb(255 255 255 / 0.35) 14%, transparent 26%),
-    radial-gradient(circle at 70% 78%, rgb(255 255 255 / 0.25), transparent 35%),
-    conic-gradient(from 210deg at 55% 58%, transparent 0 12%, color-mix(in oklab, var(--c2) 80%, transparent) 16% 24%, transparent 30% 58%, color-mix(in oklab, var(--c2) 70%, transparent) 64% 70%, transparent 76%),
-    radial-gradient(circle at 40% 35%, color-mix(in oklab, var(--c) 70%, white) 0%, var(--c) 45%, color-mix(in oklab, var(--c) 60%, black) 100%);
+  background: radial-gradient(circle at 40% 34%, #ffffff 0%, #f2f5f8 42%, #dce2e8 78%, #c3ccd5 100%);
   box-shadow:
-    inset -0.12em -0.16em 0.3em rgb(0 0 0 / 0.28),
-    inset 0.06em 0.08em 0.12em rgb(255 255 255 / 0.35),
-    0 0.08em 0.14em rgb(11 42 74 / 0.28);
+    inset 0 -0.08em 0.16em rgb(11 42 74 / 0.2),
+    0 0.05em 0.1em rgb(11 42 74 / 0.28);
 }
-.marble.has-flag {
-  background-size: cover;
-  background-position: center;
-}
-.marble.has-flag::after {
-  content: "";
+.marble-shine {
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  pointer-events: none;
   background:
-    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 6%, rgb(255 255 255 / 0.3) 14%, transparent 26%),
-    radial-gradient(circle at 50% 50%, transparent 55%, rgb(0 0 0 / 0.3) 100%);
+    radial-gradient(ellipse 30% 20% at 33% 24%, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0) 100%),
+    radial-gradient(circle at 50% 45%, transparent 58%, rgb(11 42 74 / 0.16) 100%);
 }
 
 /* one orchestrated moment: the leaderboard marbles roll in on first paint */

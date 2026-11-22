@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pageData, fmtDate, ordinal } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Marble } from "@/components/Marble";
+import { Marble, MarbleLink } from "@/components/Marble";
 import { Flag } from "@/components/Flag";
 import { EmptySeason } from "@/components/Empty";
 
@@ -24,11 +24,26 @@ export default async function EventPage({ params, searchParams }: { params: Prom
     <>
       <SiteHeader leagueName={leagueName} season={data.season} seasons={seasons} active="/events" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <nav className="flex justify-between pt-6 text-sm text-ink-soft">
-          {prev ? <Link href={`/events/${prev.no}${q}`} className="hover:text-ink">&larr; {prev.name}</Link> : <span />}
-          {next ? <Link href={`/events/${next.no}${q}`} className="hover:text-ink">{next.name} &rarr;</Link> : <span />}
+        <nav className="flex items-center gap-2 pt-5 text-[15px] text-ink-soft">
+          <Link href={`/events${q}`} className="-ml-2 flex items-center gap-1.5 rounded-md px-2 py-1.5 font-medium hover:bg-white hover:text-ink">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 18l-6-6 6-6" /></svg>
+            All events
+          </Link>
+          <span className="ml-auto flex items-center gap-1">
+            {prev ? (
+              <Link href={`/events/${prev.no}${q}`} className="grid h-9 w-9 place-items-center rounded-md hover:bg-white hover:text-ink" title={`Previous: ${prev.name}`} aria-label={`Previous event: ${prev.name}`}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 18l-6-6 6-6" /></svg>
+              </Link>
+            ) : <span className="h-9 w-9" />}
+            <span className="num text-sm text-ink-faint">{ev.no} / {data.events.length}</span>
+            {next ? (
+              <Link href={`/events/${next.no}${q}`} className="grid h-9 w-9 place-items-center rounded-md hover:bg-white hover:text-ink" title={`Next: ${next.name}`} aria-label={`Next event: ${next.name}`}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M9 18l6-6-6-6" /></svg>
+              </Link>
+            ) : <span className="h-9 w-9" />}
+          </span>
         </nav>
-        <header className="mt-6 flex flex-wrap items-end gap-x-6 gap-y-2">
+        <header className="mt-4 flex flex-wrap items-end gap-x-6 gap-y-2">
           <span className="num text-7xl font-bold leading-none text-ink-faint">{ev.no}</span>
           <div>
             <h1 className="font-display text-5xl font-bold leading-none tracking-tight">{ev.name}</h1>
@@ -51,11 +66,11 @@ export default async function EventPage({ params, searchParams }: { params: Prom
                   const m = data.marbles.get(r.marbleId)!;
                   const own = owners(m.id);
                   return (
-                    <li key={r.marbleId} className="flex items-center gap-3 border-b border-frost px-4 py-2.5 last:border-0">
+                    <li key={r.marbleId} className="relative flex items-center gap-3 border-b border-frost px-4 py-2.5 last:border-0 hover:bg-ice/60">
                       <span className="num w-10 text-xl font-bold text-ink-soft">{r.placement ? ordinal(r.placement) : ""}</span>
                       <Marble m={m} size={r.placement === 1 ? 34 : 28} />
                       <span className="min-w-0 flex-1">
-                        <span className="block font-semibold">{m.name}</span>
+                        <Link href={`/marbles/${encodeURIComponent(m.code)}${q}`} className="block font-semibold after:absolute after:inset-0 after:content-['']">{m.name}</Link>
                         {own.length > 0 && <span className="block truncate text-sm text-ink-soft">Owned by {own.map((t) => t.name).join(", ")}</span>}
                       </span>
                       <span className="num text-2xl font-bold">{r.points}</span>
@@ -71,18 +86,16 @@ export default async function EventPage({ params, searchParams }: { params: Prom
               ) : (
               <ol className="space-y-1.5">
                 {league.map(({ t, e }) => (
-                  <li key={t.id}>
-                    <Link href={`/teams/${t.id}${q}`} className="flex items-center gap-3 rounded-lg bg-board px-3 py-2 hover:bg-white/70">
-                      <Flag src={t.flag} name={t.name} size={30} />
-                      <span className="min-w-0 flex-1 truncate font-medium">{t.name}</span>
-                      {e.slots.map((s) => (
-                        <span key={s.slot} className="flex items-center gap-1 text-sm text-ink-soft">
-                          <Marble m={s.marble} size={18} />
-                          <span className="num w-5 text-right">{s.points}</span>
-                        </span>
-                      ))}
-                      <span className="num w-10 text-right text-xl font-bold">+{e.total}</span>
-                    </Link>
+                  <li key={t.id} className="relative flex items-center gap-3 rounded-lg bg-board px-3 py-2 hover:bg-white/70">
+                    <Flag src={t.flag} name={t.name} size={30} />
+                    <Link href={`/teams/${t.id}${q}`} className="min-w-0 flex-1 truncate font-medium after:absolute after:inset-0 after:content-['']">{t.name}</Link>
+                    {e.slots.map((s) => (
+                      <span key={s.slot} className="flex items-center gap-1 text-sm text-ink-soft">
+                        <MarbleLink m={s.marble} q={q} size={20} />
+                        <span className="num w-5 text-right">{s.points}</span>
+                      </span>
+                    ))}
+                    <span className="num w-10 text-right text-xl font-bold">+{e.total}</span>
                   </li>
                 ))}
               </ol>

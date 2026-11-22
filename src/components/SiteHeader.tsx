@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SeasonSelect } from "./SeasonSelect";
+import { Glass } from "./Marble";
 import type { SeasonRow } from "@/lib/season";
 
 const NAV = [
@@ -15,8 +16,8 @@ export function SiteHeader({ leagueName, season, seasons, active }: { leagueName
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 sm:gap-6 sm:px-4 py-3 sm:px-6">
         <Link href={`/${q}`} className="flex items-center gap-2.5" aria-label={`${leagueName} home`}>
           <span className="relative flex">
-            <span className="marble" style={{ width: 22, height: 22, fontSize: 22, ["--c" as string]: "#d7263d" }} />
-            <span className="marble -ml-2 mt-2" style={{ width: 14, height: 14, fontSize: 14, ["--c" as string]: "#1f5fae" }} />
+            <Glass color="#d7263d" size={24} />
+            <Glass color="#1f5fae" color2="#7fb3ec" size={15} className="-ml-2 mt-2.5" />
           </span>
           <span className="hidden font-display text-xl font-bold leading-none tracking-tight md:inline">{leagueName}</span>
           <span className="hidden font-display text-xl font-bold leading-none min-[420px]:inline md:hidden">FML</span>

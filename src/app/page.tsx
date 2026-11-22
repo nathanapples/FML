@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Leaderboard } from "@/components/Leaderboard";
 import { SeasonStrip } from "@/components/SeasonStrip";
 import { RaceChart } from "@/components/RaceChart";
-import { Marble } from "@/components/Marble";
+import { MarbleLink } from "@/components/Marble";
 import { EmptySeason } from "@/components/Empty";
 
 export const dynamic = "force-dynamic";
@@ -28,8 +28,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
               {completed.length === 0
                 ? `${season.eventCount} events, none raced yet.`
                 : done
-                  ? `Final standings after all ${season.eventCount} events.`
-                  : `After ${lastEvent!.name}, event ${lastEvent!.no} of ${season.eventCount}.`}
+                  ? `Final standings, all ${season.eventCount} events completed.`
+                  : `Completed ${completed.length} of ${season.eventCount} events.`}
               {next && completed.length > 0 && (
                 <> Next up: <Link className="font-medium text-ink underline decoration-frost underline-offset-4 hover:decoration-blueline" href={`/events/${next.no}${q}`}>{next.name}</Link>{next.date ? ` on ${fmtDate(next.date)}` : ""}.</>
               )}
@@ -93,8 +93,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
                   const h = [132, 104, 84][idx];
                   return (
                     <li key={idx} className="flex flex-1 flex-col items-center gap-2">
-                      <Marble m={m} size={idx === 0 ? 64 : 52} />
-                      <span className="text-center text-sm font-semibold leading-tight">{m.name}</span>
+                      <MarbleLink m={m} q={q} size={idx === 0 ? 64 : 52} className="flex-col">
+                        <span className="text-center text-sm font-semibold leading-tight hover:underline">{m.name}</span>
+                      </MarbleLink>
                       <span
                         className="flex w-full items-start justify-center rounded-t-xl pt-2 num text-3xl font-bold text-white"
                         style={{ height: h, background: ["var(--color-gold)", "var(--color-silver)", "var(--color-bronze)"][idx] }}
@@ -116,11 +117,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
                   .map((t) => {
                     const ev = t.events.find((x) => x.eventNo === lastEvent.no)!;
                     return (
-                      <li key={t.id} className="flex items-center gap-3 rounded-lg bg-board px-3 py-2">
-                        <span className="min-w-0 flex-1 truncate font-medium">{t.name}</span>
+                      <li key={t.id} className="relative flex items-center gap-3 rounded-lg bg-board px-3 py-2 hover:bg-white/70">
+                        <Link href={`/teams/${t.id}${q}`} className="min-w-0 flex-1 truncate font-medium after:absolute after:inset-0 after:content-['']">{t.name}</Link>
                         {ev.slots.map((s) => (
                           <span key={s.slot} className="flex items-center gap-1 text-sm text-ink-soft">
-                            <Marble m={s.marble} size={18} />
+                            <MarbleLink m={s.marble} q={q} size={20} />
                             <span className="num w-5 text-right">{s.points}</span>
                           </span>
                         ))}

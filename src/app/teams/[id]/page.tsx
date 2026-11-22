@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pageData, ordinal } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Marble } from "@/components/Marble";
+import { MarbleLink } from "@/components/Marble";
 import { Flag } from "@/components/Flag";
 import { EmptySeason } from "@/components/Empty";
 
@@ -43,10 +43,14 @@ export default async function TeamPage({ params, searchParams }: { params: Promi
             const earned = t.events.reduce((a, e) => a + (e.slots.find((s) => s.slot === slot)?.points ?? 0), 0);
             return (
               <div key={slot} className="flex items-center gap-4 rounded-2xl bg-board p-5">
-                <Marble m={m} size={64} />
+                <MarbleLink m={m} q={q} size={64} />
                 <div className="min-w-0 flex-1">
                   <div className="text-sm text-ink-faint">Slot {slot}</div>
-                  <div className="font-display text-2xl font-semibold leading-tight">{m?.name ?? "Empty"}</div>
+                  {m ? (
+                    <Link href={`/marbles/${encodeURIComponent(m.code)}${q}`} className="block font-display text-2xl font-semibold leading-tight hover:underline">{m.name}</Link>
+                  ) : (
+                    <div className="font-display text-2xl font-semibold leading-tight">Empty</div>
+                  )}
                   {picks.length > 1 && (
                     <div className="mt-1 text-sm text-ink-soft">
                       {picks.map((p, i) => (
@@ -86,7 +90,7 @@ export default async function TeamPage({ params, searchParams }: { params: Promi
                       </td>
                       {e.slots.map((s) => (
                         <td key={s.slot} className="px-3 py-2">
-                          <span className="flex items-center gap-2"><Marble m={s.marble} size={18} /><span className="num w-6">{ev.completed && ev.counts ? s.points : ""}</span></span>
+                          <span className="flex items-center gap-2"><MarbleLink m={s.marble} q={q} size={20} /><span className="num w-6">{ev.completed && ev.counts ? s.points : ""}</span></span>
                         </td>
                       ))}
                       <td className="num px-3 py-2 text-right text-lg font-semibold">{ev.completed ? (ev.counts ? e.total : <span className="font-sans text-sm font-normal text-ink-faint">Not counted</span>) : ""}</td>

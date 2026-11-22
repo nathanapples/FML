@@ -62,12 +62,14 @@ export function RaceChart({ events, teams }: { events: { no: number; name: strin
                 width={44}
               />
               <Tooltip
+                allowEscapeViewBox={{ x: false, y: true }}
+                wrapperStyle={{ zIndex: 20, maxWidth: "calc(100vw - 2rem)" }}
                 cursor={{ stroke: "#8aa0b4", strokeDasharray: "3 3" }}
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   const list = [...payload].sort((a, b) => (mode === "rank" ? Number(a.value) - Number(b.value) : Number(b.value) - Number(a.value)));
                   return (
-                    <div className="min-w-52 rounded-xl bg-ink/95 px-3 py-2 text-[13px] text-white shadow-xl">
+                    <div className="w-[min(18rem,calc(100vw-3rem))] rounded-xl bg-ink/95 px-3 py-2 text-[13px] text-white shadow-xl">
                       <div className="mb-1 font-display text-base font-semibold">{label}</div>
                       {list.map((p) => {
                         const t = teams.find((x) => `t${x.id}` === p.dataKey)!;

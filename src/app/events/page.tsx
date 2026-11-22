@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { pageData, fmtDate } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Marble } from "@/components/Marble";
+import { Marble, MarbleLink } from "@/components/Marble";
 import { EmptySeason } from "@/components/Empty";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +17,7 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/events" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <h1 className="pt-10 font-display text-5xl font-bold tracking-tight">Events</h1>
-        <p className="mt-2 text-ink-soft">{data.completed.length} of {season.eventCount} raced. Points per finish: {season.pointsTable.join(", ")}.</p>
+        <p className="mt-2 text-ink-soft">Completed {data.completed.length} of {season.eventCount} events.</p>
 
         <ol className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {events.map((e) => {
@@ -68,8 +68,9 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
                   <td className="sticky left-0 z-10 bg-board px-4 py-1.5">
                     <span className="flex items-center gap-2 whitespace-nowrap">
                       <span className="num w-5 text-right text-ink-faint">{m.rank}</span>
-                      <Marble m={m.marble} size={20} />
-                      <span className="font-medium">{m.marble.name}</span>
+                      <MarbleLink m={m.marble} q={q} size={20}>
+                        <span className="font-medium hover:underline">{m.marble.name}</span>
+                      </MarbleLink>
                     </span>
                   </td>
                   <td className="num px-2 text-right text-lg font-bold">{m.total}</td>
