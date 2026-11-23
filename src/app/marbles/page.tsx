@@ -3,6 +3,8 @@ import { pageData } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Marble } from "@/components/Marble";
 import { EmptySeason } from "@/components/Empty";
+import { PageTitle } from "@/components/PageTitle";
+import { Flag } from "@/components/Flag";
 
 export const dynamic = "force-dynamic";
 
@@ -33,9 +35,8 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
     <>
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/marbles" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <h1 className="pt-10 font-display text-5xl font-bold tracking-tight">Marble League</h1>
-        <p className="mt-2 text-ink-soft">Standings for the {marbleStandings.length} marble teams in {season.name}, and which fantasy teams have each one. Tap a team for its full season.</p>
-        <ol className="mt-8 overflow-hidden rounded-2xl bg-board">
+        <PageTitle title="Marble League">{season.year} season, {marbleStandings.length} marble teams. Tap one for its full season.</PageTitle>
+        <ol className="overflow-hidden rounded-2xl bg-board">
           {marbleStandings.map((m) => {
             const owners = data.teams.filter((t) => t.current.some((c) => c?.id === m.marble.id));
             return (
@@ -46,9 +47,18 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
                   <Link href={`/marbles/${encodeURIComponent(m.marble.code)}${q}`} className="block font-semibold after:absolute after:inset-0 after:content-['']">
                     {m.marble.name}
                   </Link>
-                  <span className="block text-sm leading-snug text-ink-soft">
-                    {owners.length === 0 ? "Not on any fantasy team" : owners.map((t) => t.name).join(", ")}
-                  </span>
+                  {owners.length === 0 ? (
+                    <span className="block text-sm text-ink-faint">Not on any fantasy team</span>
+                  ) : (
+                    <span className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-sm leading-snug text-ink-soft">
+                      {owners.map((t) => (
+                        <span key={t.id} className="inline-flex min-w-0 items-center gap-1.5">
+                          <Flag src={t.flag} name={t.name} size={16} className="rounded-[4px]" />
+                          <span className="truncate">{t.name}</span>
+                        </span>
+                      ))}
+                    </span>
+                  )}
                 </span>
                 <span className="col-start-3 md:col-auto"><Medals g={m.gold} s={m.silver} b={m.bronze} /></span>
                 <span className="col-span-4 flex h-8 items-end gap-[3px] md:col-span-1" aria-label="Points per event">

@@ -6,6 +6,7 @@ import { SeasonStrip } from "@/components/SeasonStrip";
 import { RaceChart } from "@/components/RaceChart";
 import { MarbleLink } from "@/components/Marble";
 import { EmptySeason } from "@/components/Empty";
+import { PageTitle } from "@/components/PageTitle";
 
 export const dynamic = "force-dynamic";
 
@@ -21,23 +22,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     <>
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <section className="flex flex-col gap-5 pb-6 pt-10 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl">Fantasy Standings</h1>
-            <p className="mt-3 text-[17px] text-ink-soft">
-              {season.name}.{" "}
-              {completed.length === 0
-                ? `${season.eventCount} events, none raced yet.`
-                : done
-                  ? `Final standings, all ${season.eventCount} events completed.`
-                  : `Completed ${completed.length} of ${season.eventCount} events.`}
-              {next && completed.length > 0 && (
-                <> Next up: <Link className="font-medium text-ink underline decoration-frost underline-offset-4 hover:decoration-blueline" href={`/events/${next.no}${q}`}>{next.name}</Link>{next.date ? ` on ${fmtDate(next.date)}` : ""}.</>
-              )}
-            </p>
-          </div>
-          <SeasonStrip data={data} q={q} />
-        </section>
+        <PageTitle title="Fantasy Standings" aside={<SeasonStrip data={data} q={q} />}>
+          {completed.length === 0
+            ? `${season.year} season, no events raced yet.`
+            : done
+              ? `${season.year} season, all ${season.eventCount} events completed.`
+              : `${season.year} season, completed ${completed.length} of ${season.eventCount} events.`}
+          {next && completed.length > 0 && (
+            <> Next up: <Link className="font-medium text-ink underline decoration-frost underline-offset-4 hover:decoration-blueline" href={`/events/${next.no}${q}`}>{next.name}</Link>{next.date ? ` on ${fmtDate(next.date)}` : ""}.</>
+          )}
+        </PageTitle>
 
         <Leaderboard data={data} q={q} />
 

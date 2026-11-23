@@ -3,6 +3,7 @@ import { pageData, fmtDate } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Marble, MarbleLink } from "@/components/Marble";
 import { EmptySeason } from "@/components/Empty";
+import { PageTitle } from "@/components/PageTitle";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +17,9 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
     <>
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/events" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <h1 className="pt-10 font-display text-5xl font-bold tracking-tight">Events</h1>
-        <p className="mt-2 text-ink-soft">Completed {data.completed.length} of {season.eventCount} events.</p>
+        <PageTitle title="Events">{season.year} season, completed {data.completed.length} of {season.eventCount} events.</PageTitle>
 
-        <ol className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {events.map((e) => {
             const top = results.get(e.no)?.slice(0, 3) ?? [];
             return (
