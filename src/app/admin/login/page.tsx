@@ -1,7 +1,7 @@
 import { adminEnabled, isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { LoginForm } from "./LoginForm";
-import { Glass } from "@/components/Marble";
+import { LogoMarbles } from "@/components/SiteHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +11,7 @@ export default async function LoginPage() {
     <main className="grid min-h-dvh place-items-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex items-center gap-3">
-          <Glass color="#d7263d" size={36} />
+          <LogoMarbles size={30} />
           <h1 className="font-display text-3xl font-bold">FML admin</h1>
         </div>
         {adminEnabled() ? (

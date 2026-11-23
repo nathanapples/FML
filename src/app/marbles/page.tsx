@@ -33,8 +33,8 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
     <>
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/marbles" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <h1 className="pt-10 font-display text-5xl font-bold tracking-tight">Marble teams</h1>
-        <p className="mt-2 text-ink-soft">The {marbleStandings.length} teams competing in {season.name}, and which of our fantasy teams are riding on each. Tap one for its full season.</p>
+        <h1 className="pt-10 font-display text-5xl font-bold tracking-tight">Marble League</h1>
+        <p className="mt-2 text-ink-soft">Standings for the {marbleStandings.length} marble teams in {season.name}, and which fantasy teams have each one. Tap a team for its full season.</p>
         <ol className="mt-8 overflow-hidden rounded-2xl bg-board">
           {marbleStandings.map((m) => {
             const owners = data.teams.filter((t) => t.current.some((c) => c?.id === m.marble.id));

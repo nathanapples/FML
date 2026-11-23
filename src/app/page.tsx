@@ -23,8 +23,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <section className="flex flex-col gap-5 pb-6 pt-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl">{season.name}</h1>
+            <h1 className="font-display text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl">Fantasy Standings</h1>
             <p className="mt-3 text-[17px] text-ink-soft">
+              {season.name}.{" "}
               {completed.length === 0
                 ? `${season.eventCount} events, none raced yet.`
                 : done
@@ -81,11 +82,15 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
         </section>
 
         {lastEvent && lastEvent.counts && (
-          <section className="mt-14 grid gap-8 md:grid-cols-[1fr_1fr]">
+          <section className="mt-14">
+            <h2 className="font-display text-3xl font-bold tracking-tight">
+              <Link href={`/events/${lastEvent.no}${q}`} className="hover:underline">Latest Event - {lastEvent.name}</Link>
+            </h2>
+            <p className="mt-1 text-ink-soft">Event {lastEvent.no}{lastEvent.date ? `, ${fmtDate(lastEvent.date, { month: "long", day: "numeric", year: "numeric" })}` : ""}</p>
+            <div className="mt-6 grid gap-10 md:grid-cols-[1fr_1fr]">
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight">{lastEvent.name} podium</h2>
-              <p className="mt-1 text-ink-soft">Event {lastEvent.no}{lastEvent.date ? `, ${fmtDate(lastEvent.date, { month: "long", day: "numeric", year: "numeric" })}` : ""}</p>
-              <ol className="mt-5 flex items-end gap-3">
+              <h3 className="font-display text-xl font-semibold">Marble League Podium</h3>
+              <ol className="mt-4 flex items-end gap-3">
                 {[1, 0, 2].map((idx) => {
                   const r = podium[idx];
                   if (!r) return <li key={idx} className="flex-1" />;
@@ -108,9 +113,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
               </ol>
             </div>
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight">Who cashed in</h2>
-              <p className="mt-1 text-ink-soft">League teams by points earned at {lastEvent.name}.</p>
-              <ol className="mt-5 space-y-1.5">
+              <h3 className="font-display text-xl font-semibold">Top Fantasy League Points</h3>
+              <ol className="mt-4 space-y-1.5">
                 {[...teams]
                   .sort((a, b) => (b.lastEventPoints ?? 0) - (a.lastEventPoints ?? 0))
                   .slice(0, 6)
@@ -130,6 +134,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
                     );
                   })}
               </ol>
+            </div>
             </div>
           </section>
         )}

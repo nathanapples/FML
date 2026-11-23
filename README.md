@@ -55,9 +55,9 @@ The public pages are read-only; anything that changes data sits behind the admin
 
 ## Using it
 
-- **Standings** (`/`): the leaderboard, season progress, the race chart (total points or league position), and the latest podium.
+- **Fantasy Standings** (`/`): the leaderboard, season progress, the race chart (total points or league position), and the latest podium.
 - **Events** (`/events`): every event and a results grid; each event has its own page with the finishing order and each league team's haul.
-- **Marbles** (`/marbles`): marble team standings, medals and how many league teams own each.
+- **Marble League** (`/marbles`): the real marble teams' standings, medals and which fantasy teams have each one, with a page per marble team.
 - **Team pages** (`/teams/:id`): slots, trade history and an event-by-event breakdown.
 - **Admin** (`/admin`):
   - *Results*: tap marble teams in finishing order. Points come from the season's points table (25, 20, 15, 12 … 0 by default) and any of them can be edited.

@@ -49,10 +49,10 @@ export function Leaderboard({ data, q }: { data: SeasonData; q: string }) {
                   <span className="block truncate text-sm text-ink-soft">{t.manager}</span>
                 </span>
               </span>
-              <span className="order-last col-span-2 col-start-2 row-start-2 mt-2 flex flex-wrap items-center gap-1.5 sm:col-span-1 sm:col-start-3 sm:-mt-1 sm:pl-[54px]">
+              <span className="order-last col-span-2 col-start-2 row-start-2 mt-2 flex flex-wrap items-center gap-1.5 sm:col-span-1 sm:col-start-3 sm:pl-[54px]">
                 {t.current.map((m, k) => (
                   <span key={k} style={{ ["--i" as string]: i * season.slotsPerTeam + k }}>
-                    <MarbleLink m={m} q={q} size={22} className="max-w-[11rem] bg-ice py-0.5 pl-0.5 pr-2.5 hover:bg-frost">
+                    <MarbleLink m={m} q={q} size={22} className="max-w-[11rem] bg-ice py-0.5 pl-0.5 pr-2.5 hover:translate-y-0 hover:bg-frost">
                       <span className="truncate text-[13px] font-medium text-ink-soft">{m?.name}</span>
                     </MarbleLink>
                   </span>

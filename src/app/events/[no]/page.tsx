@@ -43,11 +43,11 @@ export default async function EventPage({ params, searchParams }: { params: Prom
             ) : <span className="h-9 w-9" />}
           </span>
         </nav>
-        <header className="mt-4 flex flex-wrap items-end gap-x-6 gap-y-2">
-          <span className="num text-7xl font-bold leading-none text-ink-faint">{ev.no}</span>
-          <div>
-            <h1 className="font-display text-5xl font-bold leading-none tracking-tight">{ev.name}</h1>
-            <p className="mt-2 flex flex-wrap gap-x-4 text-ink-soft">
+        <header className="mt-3 flex items-center gap-4">
+          <span className="num flex-none text-[4.75rem] font-bold leading-[0.8] text-ink-faint sm:text-[5.5rem]">{ev.no}</span>
+          <div className="min-w-0">
+            <h1 className="font-display text-4xl font-bold leading-none tracking-tight sm:text-5xl">{ev.name}</h1>
+            <p className="mt-1.5 flex flex-wrap gap-x-4 text-ink-soft">
               <span>{fmtDate(ev.date, { weekday: "long", month: "long", day: "numeric", year: "numeric" }) ?? "Date to be announced"}</span>
               {ev.wikiLink && <a className="underline decoration-frost underline-offset-4 hover:text-ink" href={ev.wikiLink} target="_blank" rel="noreferrer">Wiki</a>}
               {ev.videoLink && <a className="underline decoration-frost underline-offset-4 hover:text-ink" href={ev.videoLink} target="_blank" rel="noreferrer">Watch the race</a>}
@@ -58,9 +58,8 @@ export default async function EventPage({ params, searchParams }: { params: Prom
         {!ev.completed ? (
           <p className="mt-12 rounded-2xl border border-dashed border-frost px-6 py-14 text-center text-ink-soft">No results yet. Once this event is raced, an admin can enter the finishing order.</p>
         ) : (
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_1fr] [&>section]:min-w-0">
+          <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr] [&>section]:min-w-0">
             <section>
-              <h2 className="mb-3 font-display text-2xl font-bold">Finishing order</h2>
               <ol className="overflow-hidden rounded-2xl bg-board">
                 {rows.map((r) => {
                   const m = data.marbles.get(r.marbleId)!;
@@ -80,7 +79,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
               </ol>
             </section>
             <section>
-              <h2 className="mb-3 font-display text-2xl font-bold">League haul</h2>
+              <h2 className="mb-3 font-display text-2xl font-bold">Fantasy League Team Points</h2>
               {!ev.counts ? (
                 <p className="rounded-2xl border border-dashed border-frost px-5 py-8 text-ink-soft">This event doesn&apos;t count toward league standings, so no league team scored from it.</p>
               ) : (

@@ -9,7 +9,7 @@ export function SeasonSelect({ seasons, current }: { seasons: { year: number; na
     <label className="flex items-center gap-2 text-sm text-ink-soft">
       <span className="sr-only">Season</span>
       <select
-        className="rounded-md bg-transparent py-1 pl-2 pr-1 font-semibold text-ink hover:bg-white"
+        className="rounded-md bg-transparent py-1 pl-1 pr-0 font-semibold text-ink hover:bg-white sm:pl-2 sm:pr-1"
         value={current}
         onChange={(e) => router.push(`${path}?season=${e.target.value}`)}
       >
