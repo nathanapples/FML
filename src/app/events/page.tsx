@@ -20,29 +20,29 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <PageTitle title="Events">{season.year} season, completed {data.completed.length} of {season.eventCount} events.</PageTitle>
 
-        <ol className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-          {events.map((e) => {
-            const top = results.get(e.no)?.slice(0, 3) ?? [];
-            return (
-              <li key={e.no}>
-                <Link href={`/events/${e.no}${q}`} className={`flex h-full flex-col rounded-xl p-4 transition-colors ${e.completed ? "bg-board hover:bg-white/70" : "border border-dashed border-frost hover:bg-board/60"}`}>
-                  <span className="flex items-baseline justify-between">
-                    <span className="num text-3xl font-bold text-ink-faint">{e.no}</span>
-                    <span className="text-sm text-ink-faint">{fmtDate(e.date) ?? "Date to be announced"}</span>
-                  </span>
-                  <span className="mt-1 font-display text-xl font-semibold leading-tight">{e.name}</span>
-                  {e.completed ? (
-                    <span className="mt-3 block">
-                      <Podium rows={results.get(e.no)!} marbles={marbles} size="sm" />
-                      {!e.counts && <span className="mt-2 inline-block rounded-full bg-ice px-2 py-0.5 text-xs text-ink-soft" title="This event doesn't count toward league standings">Not counted</span>}
-                    </span>
-                  ) : (
-                    <span className="mt-3 text-sm text-ink-faint">Not raced yet</span>
+        <ol className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+          {events.map((e) => (
+            <li key={e.no}>
+              <Link
+                href={`/events/${e.no}${q}`}
+                className={`flex h-full items-center gap-4 rounded-xl px-4 py-3 transition-colors ${e.completed ? "bg-board hover:bg-white/70" : "border border-dashed border-frost hover:bg-board/60"}`}
+              >
+                <span className="num w-9 flex-none text-4xl font-bold leading-none text-ink-faint">{e.no}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-display text-xl font-semibold leading-tight">{e.name}</span>
+                  <span className="block text-sm text-ink-faint">{fmtDate(e.date) ?? "Date to be announced"}</span>
+                  {e.completed && !e.counts && (
+                    <span className="mt-1 inline-block rounded-full bg-ice px-2 py-0.5 text-xs text-ink-soft" title="This event doesn't count toward league standings">Not counted</span>
                   )}
-                </Link>
-              </li>
-            );
-          })}
+                </span>
+                {e.completed ? (
+                  <Podium rows={results.get(e.no)!} marbles={marbles} size="sm" />
+                ) : (
+                  <span className="flex-none text-sm text-ink-faint">Not raced yet</span>
+                )}
+              </Link>
+            </li>
+          ))}
         </ol>
 
         <h2 className="mb-4 mt-16 font-display text-3xl font-bold tracking-tight">Results grid</h2>
