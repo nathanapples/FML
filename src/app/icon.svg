@@ -1,15 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <radialGradient id="g" cx="40%" cy="34%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#f2f5f8"/><stop offset=".8" stop-color="#dce2e8"/><stop offset="1" stop-color="#b9c3cd"/></radialGradient>
-    <clipPath id="c"><circle cx="50" cy="50" r="46"/></clipPath>
-    <path id="f" d="M50 50 C 26 44, 20 16, 54 2 C 48 22, 70 34, 50 50 Z"/>
-    <path id="r" d="M50 50 C 44 34, 46 16, 54 2 C 58 24, 64 36, 50 50 Z"/>
+    <linearGradient id="c" x1="0.15" y1="0.1" x2="0.85" y2="0.95">
+      <stop offset="0" stop-color="#2f8ae8"/>
+      <stop offset=".38" stop-color="#1e6fd0"/>
+      <stop offset=".52" stop-color="#2fa332"/>
+      <stop offset=".7" stop-color="#5cb83a"/>
+      <stop offset=".84" stop-color="#f5b000"/>
+      <stop offset="1" stop-color="#f7c331"/>
+    </linearGradient>
+    <radialGradient id="s" cx="38%" cy="32%" r="70%">
+      <stop offset="0" stop-color="#fff" stop-opacity=".45"/>
+      <stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".32"/>
+    </radialGradient>
   </defs>
-  <circle cx="50" cy="50" r="47" fill="url(#g)" stroke="#9aa6b2" stroke-width="2.5"/>
-  <g clip-path="url(#c)">
-    <g transform="rotate(35 50 50)"><use href="#f" fill="#1e6fd0"/><use href="#r" fill="#7db8f5" opacity=".9"/></g>
-    <g transform="rotate(155 50 50)"><use href="#f" fill="#2fa332"/><use href="#r" fill="#a3d957" opacity=".9"/></g>
-    <g transform="rotate(275 50 50)"><use href="#f" fill="#f5b000"/><use href="#r" fill="#ffdd6b" opacity=".9"/></g>
-  </g>
-  <ellipse cx="32" cy="22" rx="10" ry="6" fill="#fff" opacity=".85"/>
+  <circle cx="32" cy="32" r="28" fill="url(#c)"/>
+  <circle cx="32" cy="32" r="28" fill="url(#s)"/>
+  <ellipse cx="23" cy="20" rx="7" ry="5" fill="#fff" opacity=".85"/>
 </svg>

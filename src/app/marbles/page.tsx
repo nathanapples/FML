@@ -8,18 +8,18 @@ import { Flag } from "@/components/Flag";
 
 export const dynamic = "force-dynamic";
 
-function Medals({ g, s, b }: { g: number; s: number; b: number }) {
+function Medals({ g, s, b, small = false }: { g: number; s: number; b: number; small?: boolean }) {
   const items = [
     [g, "var(--color-gold)", "gold"],
     [s, "var(--color-silver)", "silver"],
     [b, "var(--color-bronze)", "bronze"],
   ] as const;
   return (
-    <span className="flex items-center gap-2.5">
-      {items.map(([n, c, label]) => (
-        <span key={label} className={`flex items-center gap-1 ${n === 0 ? "opacity-30" : ""}`} title={`${n} ${label}`}>
-          <span className="h-3 w-3 rounded-full" style={{ background: c }} />
-          <span className="num text-[15px] font-semibold">{n}</span>
+    <span className={`flex items-center ${small ? "gap-1.5" : "gap-2.5"}`}>
+      {items.filter(([n]) => !small || n > 0).map(([n, c, label]) => (
+        <span key={label} className={`flex items-center ${small ? "gap-0.5" : "gap-1"} ${n === 0 ? "opacity-30" : ""}`} title={`${n} ${label}`}>
+          <span className={`${small ? "h-2 w-2" : "h-3 w-3"} rounded-full`} style={{ background: c }} />
+          <span className={`num font-semibold ${small ? "text-[13px]" : "text-[15px]"}`}>{n}</span>
         </span>
       ))}
     </span>
@@ -44,9 +44,12 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
                 <span className="num text-2xl font-bold text-ink-soft">{m.rank}</span>
                 <Marble m={m.marble} size={40} />
                 <span className="min-w-0">
-                  <Link href={`/marbles/${encodeURIComponent(m.marble.code)}${q}`} className="block font-semibold after:absolute after:inset-0 after:content-['']">
-                    {m.marble.name}
-                  </Link>
+                  <span className="flex min-w-0 items-center gap-2.5">
+                    <Link href={`/marbles/${encodeURIComponent(m.marble.code)}${q}`} className="min-w-0 truncate font-semibold after:absolute after:inset-0 after:content-['']">
+                      {m.marble.name}
+                    </Link>
+                    <span className="flex-none md:hidden"><Medals g={m.gold} s={m.silver} b={m.bronze} small /></span>
+                  </span>
                   {owners.length === 0 ? (
                     <span className="block text-sm text-ink-faint">Not on any fantasy team</span>
                   ) : (
@@ -60,7 +63,7 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
                     </span>
                   )}
                 </span>
-                <span className="col-start-3 md:col-auto"><Medals g={m.gold} s={m.silver} b={m.bronze} /></span>
+                <span className="hidden md:block"><Medals g={m.gold} s={m.silver} b={m.bronze} /></span>
                 <span className="col-span-4 flex h-8 items-end gap-[3px] md:col-span-1" aria-label="Points per event">
                   {events.map((e, i) => (
                     <span key={e.no} title={`${e.name}: ${m.points[i]}`} className="flex-1 rounded-sm" style={{ height: e.completed ? `${Math.max(6, (m.points[i] / max) * 100)}%` : "6%", background: e.completed ? `color-mix(in oklab, ${m.marble.color} 82%, #0b2a4a)` : "var(--color-frost)" }} />

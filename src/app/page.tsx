@@ -56,8 +56,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
           </dl>
         )}
 
-        <section className="mt-14">
-          <h2 className="mb-4 font-display text-3xl font-bold tracking-tight">The race</h2>
+        <section className="mt-10" aria-label="Points over the season">
           <div className="rounded-2xl bg-board p-4 sm:p-6">
             <RaceChart
               events={completed.map((e) => ({ no: e.no, name: e.name }))}
