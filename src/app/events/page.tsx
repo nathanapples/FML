@@ -3,6 +3,7 @@ import { pageData, fmtDate } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Marble, MarbleLink } from "@/components/Marble";
 import { EmptySeason } from "@/components/Empty";
+import { Podium } from "@/components/Podium";
 import { PageTitle } from "@/components/PageTitle";
 
 export const dynamic = "force-dynamic";
@@ -31,12 +32,9 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
                   </span>
                   <span className="mt-1 font-display text-xl font-semibold leading-tight">{e.name}</span>
                   {e.completed ? (
-                    <span className="mt-3 flex items-center gap-1.5">
-                      {top.map((r, i) => (
-                        <Marble key={r.marbleId} m={marbles.get(r.marbleId)} size={i === 0 ? 30 : 22} title={`${i + 1}. ${marbles.get(r.marbleId)?.name}`} />
-                      ))}
-                      <span className="ml-1 truncate text-sm text-ink-soft">{marbles.get(top[0]?.marbleId)?.name} won</span>
-                      {!e.counts && <span className="ml-auto flex-none rounded-full bg-ice px-2 py-0.5 text-xs text-ink-soft" title="This event doesn't count toward league standings">Not counted</span>}
+                    <span className="mt-3 block">
+                      <Podium rows={results.get(e.no)!} marbles={marbles} size="sm" />
+                      {!e.counts && <span className="mt-2 inline-block rounded-full bg-ice px-2 py-0.5 text-xs text-ink-soft" title="This event doesn't count toward league standings">Not counted</span>}
                     </span>
                   ) : (
                     <span className="mt-3 text-sm text-ink-faint">Not raced yet</span>

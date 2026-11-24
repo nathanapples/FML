@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 import { notFound } from "next/navigation";
 import { getSetting, db } from "@/lib/db";
 import { listSeasons, resolveSeason } from "@/lib/season";
@@ -25,10 +26,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
       <SiteHeader leagueName={leagueName} season={resolveSeason(null)} seasons={listSeasons()} active="/" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <nav className="pt-5 text-[15px] text-ink-soft">
-          <Link href="/players" className="-ml-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 font-medium hover:bg-white hover:text-ink">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 18l-6-6 6-6" /></svg>
-            All players
-          </Link>
+          <BackLink fallback={"/players"} />
         </nav>
 
         <header className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-5">

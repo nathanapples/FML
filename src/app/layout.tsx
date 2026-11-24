@@ -6,6 +6,7 @@ import "@fontsource/barlow-condensed/500.css";
 import "@fontsource/barlow-condensed/600.css";
 import "@fontsource/barlow-condensed/700.css";
 import "./globals.css";
+import { NavTracker } from "@/components/NavTracker";
 
 export const metadata: Metadata = {
   title: "FML: Fantasy Marble League",
@@ -16,7 +17,10 @@ export const viewport: Viewport = { themeColor: "#eef3f6" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <NavTracker />
+        {children}
+      </body>
     </html>
   );
 }

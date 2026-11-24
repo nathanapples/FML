@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 import { notFound } from "next/navigation";
 import { pageData, ordinal } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -22,7 +23,7 @@ export default async function TeamPage({ params, searchParams }: { params: Promi
     <>
       <SiteHeader leagueName={leagueName} season={data.season} seasons={seasons} active="/" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <Link href={`/${q}`} className="mt-6 inline-block text-sm text-ink-soft hover:text-ink">&larr; Fantasy Teams</Link>
+        <nav className="pt-5 text-[15px] text-ink-soft"><BackLink fallback={`/${q}`} /></nav>
         <header className="mt-4 flex flex-wrap items-center gap-6">
           <Flag src={t.flag} name={t.name} size={112} className="rounded-2xl shadow-[0_10px_30px_-12px_rgb(11_42_74_/_0.5)]" />
           <div className="min-w-0 flex-1">

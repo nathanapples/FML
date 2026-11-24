@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 import { notFound } from "next/navigation";
 import { pageData, fmtDate, ordinal } from "@/lib/page";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Marble, MarbleLink } from "@/components/Marble";
 import { Flag } from "@/components/Flag";
 import { EmptySeason } from "@/components/Empty";
+import { Podium } from "@/components/Podium";
 
 export const dynamic = "force-dynamic";
 
@@ -25,10 +27,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
       <SiteHeader leagueName={leagueName} season={data.season} seasons={seasons} active="/events" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <nav className="flex items-center gap-2 pt-5 text-[15px] text-ink-soft">
-          <Link href={`/events${q}`} className="-ml-2 flex items-center gap-1.5 rounded-md px-2 py-1.5 font-medium hover:bg-white hover:text-ink">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 18l-6-6 6-6" /></svg>
-            All events
-          </Link>
+          <BackLink fallback={`/events${q}`} />
           <span className="ml-auto flex items-center gap-1">
             {prev ? (
               <Link href={`/events/${prev.no}${q}`} className="grid h-9 w-9 place-items-center rounded-md hover:bg-white hover:text-ink" title={`Previous: ${prev.name}`} aria-label={`Previous event: ${prev.name}`}>
@@ -58,7 +57,9 @@ export default async function EventPage({ params, searchParams }: { params: Prom
         {!ev.completed ? (
           <p className="mt-12 rounded-2xl border border-dashed border-frost px-6 py-14 text-center text-ink-soft">No results yet. Once this event is raced, an admin can enter the finishing order.</p>
         ) : (
-          <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr] [&>section]:min-w-0">
+          <>
+          <div className="mx-auto mt-8 max-w-md"><Podium rows={rows} marbles={data.marbles} q={q} /></div>
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_1fr] [&>section]:min-w-0">
             <section>
               <ol className="overflow-hidden rounded-2xl bg-board">
                 {rows.map((r) => {
@@ -101,6 +102,7 @@ export default async function EventPage({ params, searchParams }: { params: Prom
               )}
             </section>
           </div>
+          </>
         )}
       </main>
     </>
