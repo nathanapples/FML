@@ -3,14 +3,14 @@ import { Marble, MarbleLink } from "./Marble";
 
 const MEDAL = ["var(--color-gold)", "var(--color-silver)", "var(--color-bronze)"];
 
-/** Top three of an event on a podium: 2nd, 1st, 3rd. "sm" fits inside an event card (no links, so the card can be one). */
+/** Top three of an event on a podium: 2nd, 1st, 3rd. "sm" is the marbles-only version inside an event card (no links, so the card can be one). */
 export function Podium({ rows, marbles, q = "", size = "lg" }: { rows: ResultRow[]; marbles: Map<number, M>; q?: string; size?: "lg" | "sm" }) {
   const top = rows.slice(0, 3);
   const lg = size === "lg";
   const heights = lg ? [132, 104, 84] : [26, 19, 14];
   const marbleSize = lg ? [64, 52, 52] : [26, 22, 22];
   return (
-    <ol className={`flex items-end ${lg ? "gap-3" : "w-[156px] flex-none gap-1"}`} aria-label="Podium">
+    <ol className={`flex items-end ${lg ? "gap-3" : "w-24 flex-none gap-1"}`} aria-label="Podium">
       {[1, 0, 2].map((idx) => {
         const r = top[idx];
         if (!r) return <li key={idx} className="flex-1" />;
@@ -23,8 +23,7 @@ export function Podium({ rows, marbles, q = "", size = "lg" }: { rows: ResultRow
               </MarbleLink>
             ) : (
               <>
-                <Marble m={m} size={marbleSize[idx]} />
-                <span className="w-full truncate text-center text-[10.5px] leading-tight text-ink-soft" title={m.name}>{m.name}</span>
+                <Marble m={m} size={marbleSize[idx]} title={`${idx + 1}. ${m.name}`} />
               </>
             )}
             <span
