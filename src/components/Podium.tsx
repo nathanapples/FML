@@ -28,7 +28,7 @@ export function Podium({ rows, marbles, q = "", size = "lg" }: { rows: ResultRow
               </>
             )}
             <span
-              className={`flex w-full items-start justify-center num font-bold text-white ${lg ? "rounded-t-xl pt-2 text-3xl" : "items-center rounded-t text-[11px]"}`}
+              className={`flex w-full justify-center num font-bold text-white ${lg ? "items-start rounded-t-xl pt-2 text-3xl" : "items-center rounded-t text-[11px]"}`}
               style={{ height: heights[idx], background: MEDAL[idx] }}
             >
               {idx + 1}
