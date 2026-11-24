@@ -25,6 +25,16 @@ export function exportBackup() {
   return out;
 }
 
+const FLAG_EXT = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".avif"]);
+function writeFlags(files: Record<string, string> | undefined) {
+  for (const [rel, b64] of Object.entries(files ?? {})) {
+    const target = path.resolve(FLAG_DIR, rel);
+    if (!target.startsWith(path.resolve(FLAG_DIR) + path.sep) || !FLAG_EXT.has(path.extname(target).toLowerCase())) continue;
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, Buffer.from(b64, "base64"));
+  }
+}
+
 /** Restores a full backup (replacing everything) or appends a single season file. Returns seasons imported. */
 export function importBackup(json: Record<string, unknown>): number {
   const d = db();
@@ -40,16 +50,13 @@ export function importBackup(json: Record<string, unknown>): number {
       }
       d.prepare("INSERT OR REPLACE INTO settings(key,value) VALUES('seeded','1')").run();
     })();
-    for (const [rel, b64] of Object.entries((json.flags as Record<string, string>) ?? {})) {
-      const target = path.resolve(FLAG_DIR, rel);
-      if (!target.startsWith(path.resolve(FLAG_DIR) + path.sep)) continue;
-      fs.mkdirSync(path.dirname(target), { recursive: true });
-      fs.writeFileSync(target, Buffer.from(b64, "base64"));
-    }
+    writeFlags(json.flags as Record<string, string> | undefined);
     return (json.seasons as unknown[]).length;
   }
   if (Array.isArray(json.marbleTeams) && Array.isArray(json.leagueTeams)) {
     if (d.prepare("SELECT 1 FROM seasons WHERE year=?").get(json.year as number)) throw new Error(`a ${json.year} season already exists, so delete it first if you want to replace it`);
+    // season files may carry their own flag images: { "league/2023/team.webp": "<base64>" }
+    writeFlags(json.flagFiles as Record<string, string> | undefined);
     importSeason(d, json as unknown as SeasonFile);
     return 1;
   }

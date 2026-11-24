@@ -81,7 +81,7 @@ Data goes to `./data`.
 
 ## Bringing in an existing league
 
-Admin, Seasons and backup, Restore accepts either a full FML backup (replaces everything, flags included) or a single season file in the format of [`seed/season-demo.json`](seed/season-demo.json), which is added alongside your other seasons.
+Admin, Seasons and backup, Restore accepts either a full FML backup (replaces everything, flags included) or a single season file in the format of [`seed/season-demo.json`](seed/season-demo.json), which is added alongside your other seasons. A season file can carry its own flag images in a `flagFiles` map of `league/<year>/<name>.webp` to base64 image data.
 
 ## Credits
 
