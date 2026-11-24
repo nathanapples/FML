@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { logout } from "@/app/admin/actions";
 
 /** Where a season switch should land: list pages keep their place, detail pages go up to their list. */
 function seasonHref(path: string, year: number, isCurrent: boolean) {
@@ -10,7 +11,20 @@ function seasonHref(path: string, year: number, isCurrent: boolean) {
 }
 
 /** The header menu: season picker and Admin, with room for each player's own items later. */
-export function HeaderMenu({ seasons, current }: { seasons: { year: number; name: string; isCurrent: boolean }[]; current: number | null }) {
+export type MenuAccount = { sso: boolean; signedIn: boolean; admin: boolean; name: string | null; hasAccount: boolean };
+
+const item = "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[15px] text-ink-soft hover:bg-ice hover:text-ink";
+const Icon = ({ d }: { d: string }) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>
+);
+const ICON = {
+  user: "M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10z",
+  lock: "M7 11V7a5 5 0 0 1 10 0v4M5 11h14v10H5z",
+  in: "M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3",
+  out: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9",
+};
+
+export function HeaderMenu({ seasons, current, account }: { seasons: { year: number; name: string; isCurrent: boolean }[]; current: number | null; account: MenuAccount }) {
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const path = usePathname();
@@ -63,10 +77,23 @@ export function HeaderMenu({ seasons, current }: { seasons: { year: number; name
               <div className="mx-2 my-1.5 border-t border-frost" />
             </>
           )}
-          <Link role="menuitem" href="/admin" className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-[15px] text-ink-soft hover:bg-ice hover:text-ink">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
-            Admin
-          </Link>
+          {account.signedIn && account.name && account.hasAccount && (
+            <div className="px-2.5 pb-1 pt-1.5 text-sm text-ink-faint">Signed in as <span className="font-medium text-ink">{account.name}</span></div>
+          )}
+          {account.hasAccount && (
+            <Link role="menuitem" href="/account" className={item}><Icon d={ICON.user} /> My account</Link>
+          )}
+          {(account.admin || !account.sso) && (
+            <Link role="menuitem" href="/admin" className={item}><Icon d={ICON.lock} /> Admin</Link>
+          )}
+          {account.sso && !account.signedIn && (
+            <Link role="menuitem" href={`/signin?back=${encodeURIComponent(path)}`} className={item}><Icon d={ICON.in} /> Sign in</Link>
+          )}
+          {account.signedIn && (
+            <form action={logout}>
+              <button role="menuitem" className={item}><Icon d={ICON.out} /> Sign out</button>
+            </form>
+          )}
         </div>
       )}
     </div>

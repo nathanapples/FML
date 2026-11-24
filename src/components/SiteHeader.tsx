@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeaderMenu } from "./HeaderMenu";
+import { authSettings, viewer } from "@/lib/auth";
 import { Glass } from "./Marble";
 import type { SeasonRow } from "@/lib/season";
 
@@ -28,8 +29,16 @@ const NAV = [
   { href: "/events", label: "Events", short: "Events" },
 ];
 
-export function SiteHeader({ leagueName, season, seasons, active }: { leagueName: string; season: SeasonRow | null; seasons: SeasonRow[]; active: string }) {
+export async function SiteHeader({ leagueName, season, seasons, active }: { leagueName: string; season: SeasonRow | null; seasons: SeasonRow[]; active: string }) {
   const q = season && !season.isCurrent ? `?season=${season.year}` : "";
+  const v = await viewer();
+  const account = {
+    sso: authSettings().mode === "oidc",
+    signedIn: !!v,
+    admin: !!v?.admin,
+    name: v?.user?.display_name ?? (v ? "Admin" : null),
+    hasAccount: !!v?.user,
+  };
   return (
     <header className="border-b border-frost bg-ice/85 backdrop-blur sticky top-0 z-30">
       <div className="mx-auto flex max-w-6xl items-center gap-1 px-2.5 py-3 sm:gap-2 sm:px-6">
@@ -52,7 +61,7 @@ export function SiteHeader({ leagueName, season, seasons, active }: { leagueName
           ))}
         </nav>
         <div className="ml-auto flex-none">
-          <HeaderMenu seasons={seasons.map((x) => ({ year: x.year, name: x.name, isCurrent: x.isCurrent }))} current={season?.year ?? null} />
+          <HeaderMenu seasons={seasons.map((x) => ({ year: x.year, name: x.name, isCurrent: x.isCurrent }))} current={season?.year ?? null} account={account} />
         </div>
       </div>
     </header>

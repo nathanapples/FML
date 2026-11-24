@@ -63,6 +63,22 @@ CREATE TABLE IF NOT EXISTS league_teams (
   flag TEXT,
   draft_order INTEGER
 );
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY,
+  oidc_sub TEXT UNIQUE,
+  email TEXT,
+  display_name TEXT NOT NULL DEFAULT '',
+  role TEXT NOT NULL DEFAULT 'member',
+  player_id INTEGER UNIQUE REFERENCES players(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  last_login_at TEXT
+);
+CREATE TABLE IF NOT EXISTS sessions (
+  id TEXT PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  via TEXT NOT NULL,
+  expires_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS picks (
   id INTEGER PRIMARY KEY,
   league_team_id INTEGER NOT NULL REFERENCES league_teams(id) ON DELETE CASCADE,

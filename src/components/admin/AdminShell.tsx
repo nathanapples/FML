@@ -9,6 +9,7 @@ const TABS = [
   { href: "/admin/teams", label: "League teams" },
   { href: "/admin/marbles", label: "Marble teams" },
   { href: "/admin/players", label: "Players" },
+  { href: "/admin/users", label: "Users and sign-in" },
   { href: "/admin/seasons", label: "Seasons and backup" },
 ];
 

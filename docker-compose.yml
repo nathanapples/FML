@@ -7,6 +7,13 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
       - ADMIN_PASSWORD=change-me
+      # - PUBLIC_URL=https://fml.example.com   # your address, for single sign-on
+      # Single sign-on can be set up in Admin, Users and sign-in, or here:
+      # - AUTH_MODE=oidc   # set to password to get back in if sign-on breaks
+      # - OIDC_ISSUER=https://id.example.com
+      # - OIDC_CLIENT_ID=
+      # - OIDC_CLIENT_SECRET=
+      # - OIDC_ADMIN_GROUP=fml-admins
       # - SEED=false   # start with an empty league instead of the demo
     volumes:
       - ./config:/config

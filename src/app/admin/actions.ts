@@ -5,7 +5,7 @@ import crypto from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db, FLAG_DIR, DEFAULT_POINTS, setSetting, findOrCreatePlayer, playerName } from "@/lib/db";
-import { checkPassword, endSession, requireAdmin, startSession } from "@/lib/auth";
+import { authSettings, checkPassword, createSession, endSession, linkUserToPlayer, oidcDiscovery, passwordLoginAllowed, recoveryAllowed, requestRecoveryLink, requireAdmin, viewer } from "@/lib/auth";
 import { importBackup } from "@/lib/backup";
 
 const str = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
@@ -38,13 +38,83 @@ async function saveFlag(f: FormData, key = "flag"): Promise<string | null> {
 /* ---------- session ---------- */
 
 export async function login(_: unknown, f: FormData) {
+  if (!passwordLoginAllowed()) return { error: "Password sign-in is off while single sign-on is on." };
   if (!checkPassword(str(f, "password"))) return { error: "That password isn't right." };
-  await startSession();
-  redirect("/admin");
+  await createSession(null, "password");
+  const back = str(f, "back");
+  redirect(back.startsWith("/") && !back.startsWith("//") ? back : "/admin");
 }
 export async function logout() {
   await endSession();
   redirect("/");
+}
+export async function askRecoveryLink(): Promise<{ result?: "sent" | "wait"; error?: string }> {
+  if (!recoveryAllowed()) return { error: "One-time links in the container log are turned off." };
+  return { result: await requestRecoveryLink() };
+}
+
+/* ---------- users and sign-in (admin) ---------- */
+
+export async function saveAuthSettings(_: unknown, f: FormData): Promise<{ ok?: string; error?: string }> {
+  await requireAdmin();
+  const s = authSettings();
+  const set = (key: string, value: string, pinned: boolean) => { if (!pinned) setSetting(key, value); };
+  set("oidcIssuer", str(f, "issuer").replace(/\/+$/, ""), s.pinned.issuer);
+  set("oidcClientId", str(f, "clientId"), s.pinned.clientId);
+  if (str(f, "clientSecret")) set("oidcClientSecret", str(f, "clientSecret"), s.pinned.clientSecret);
+  set("oidcInternalUrl", str(f, "internalUrl").replace(/\/+$/, ""), s.pinned.internalUrl);
+  set("oidcAdminGroup", str(f, "adminGroup"), s.pinned.adminGroup);
+  set("oidcLabel", str(f, "label"), s.pinned.label);
+  const wantOidc = f.get("enabled") === "on";
+  if (!s.pinned.mode) {
+    if (wantOidc) {
+      try {
+        await oidcDiscovery(true);
+      } catch (e) {
+        setSetting("authMode", "password");
+        done();
+        return { error: `Saved, but single sign-on stays off: ${(e as Error).message}` };
+      }
+    }
+    setSetting("authMode", wantOidc ? "oidc" : "password");
+  }
+  done();
+  return { ok: wantOidc ? "Saved. Single sign-on is on." : "Saved." };
+}
+export async function checkOidc(f?: FormData): Promise<{ ok?: string; error?: string }> {
+  await requireAdmin();
+  const s = authSettings();
+  const pick = (k: "issuer" | "clientId" | "internalUrl") => (s.pinned[k] || !f ? s[k] : str(f, k) || "").replace(/\/+$/, "");
+  try {
+    const { d } = await oidcDiscovery(true, { issuer: pick("issuer"), clientId: pick("clientId"), internalUrl: pick("internalUrl") });
+    return { ok: `Connected to ${d.issuer}.` };
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
+}
+export async function setUserRole(f: FormData) {
+  await requireAdmin();
+  const v = await viewer();
+  const id = int(f, "id");
+  const role = str(f, "role") === "admin" ? "admin" : "member";
+  // don't let an admin remove their own admin rights by accident
+  if (v?.user?.id === id && role !== "admin") return;
+  db().prepare("UPDATE users SET role=? WHERE id=?").run(role, id);
+  done();
+}
+export async function setUserPlayer(f: FormData) {
+  await requireAdmin();
+  const p = str(f, "playerId");
+  linkUserToPlayer(int(f, "id"), p === "" ? null : p === "new" ? "new" : Number(p));
+  done();
+}
+export async function deleteUser(f: FormData) {
+  await requireAdmin();
+  const v = await viewer();
+  const id = int(f, "id");
+  if (v?.user?.id === id) return;
+  db().prepare("DELETE FROM users WHERE id=?").run(id);
+  done();
 }
 
 /* ---------- results ---------- */

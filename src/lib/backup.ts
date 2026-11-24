@@ -4,6 +4,10 @@ import { db, FLAG_DIR, importSeason, linkPlayers, type SeasonFile } from "./db";
 
 const TABLES = ["settings", "seasons", "marble_teams", "season_marbles", "events", "results", "players", "league_teams", "picks"] as const;
 
+// sign-in settings and secrets belong to this server, not the league: never exported, kept through a restore
+const PRIVATE = ["authMode", "oidcIssuer", "oidcClientId", "oidcClientSecret", "oidcInternalUrl", "oidcAdminGroup", "oidcLabel", "cookieSecret"];
+const isPrivate = (key: unknown) => PRIVATE.includes(String(key));
+
 function walk(dir: string, base = dir): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
@@ -16,6 +20,7 @@ export function exportBackup() {
   const d = db();
   const out: Record<string, unknown> = { app: "fml", version: 2, exportedAt: new Date().toISOString() };
   for (const t of TABLES) out[t] = d.prepare(`SELECT * FROM ${t}`).all();
+  out.settings = (out.settings as { key: string }[]).filter((r) => !isPrivate(r.key));
   const used = new Set<string>(
     [...(d.prepare("SELECT flag FROM marble_teams WHERE flag IS NOT NULL").all() as { flag: string }[]), ...(d.prepare("SELECT flag FROM league_teams WHERE flag IS NOT NULL").all() as { flag: string }[])].map((r) => r.flag)
   );
@@ -39,10 +44,12 @@ function writeFlags(files: Record<string, string> | undefined) {
 export function importBackup(json: Record<string, unknown>): number {
   const d = db();
   if (json.app === "fml" && Array.isArray(json.seasons)) {
+    // remember who plays as whom, so accounts can be relinked after the players table is replaced
+    const links = d.prepare("SELECT u.id, p.name FROM users u JOIN players p ON p.id = u.player_id").all() as { id: number; name: string }[];
     d.transaction(() => {
-      for (const t of [...TABLES].reverse()) d.prepare(`DELETE FROM ${t}`).run();
+      for (const t of [...TABLES].reverse()) d.prepare(t === "settings" ? `DELETE FROM settings WHERE key NOT IN (${PRIVATE.map(() => "?").join(",")})` : `DELETE FROM ${t}`).run(...(t === "settings" ? PRIVATE : []));
       for (const t of TABLES) {
-        const rows = (json[t] as Record<string, unknown>[]) ?? [];
+        const rows = ((json[t] as Record<string, unknown>[]) ?? []).filter((r) => t !== "settings" || !isPrivate(r.key));
         for (const r of rows) {
           const cols = Object.keys(r);
           d.prepare(`INSERT INTO ${t}(${cols.join(",")}) VALUES(${cols.map(() => "?").join(",")})`).run(...cols.map((c) => r[c] as never));
@@ -52,6 +59,12 @@ export function importBackup(json: Record<string, unknown>): number {
     })();
     writeFlags(json.flags as Record<string, string> | undefined);
     linkPlayers(d);
+    const byName = d.prepare("SELECT id FROM players WHERE lower(name) = lower(?)");
+    const relink = d.prepare("UPDATE users SET player_id = ? WHERE id = ? AND NOT EXISTS (SELECT 1 FROM users WHERE player_id = ?)");
+    for (const l of links) {
+      const p = byName.get(l.name) as { id: number } | undefined;
+      if (p) relink.run(p.id, l.id, p.id);
+    }
     return (json.seasons as unknown[]).length;
   }
   if (Array.isArray(json.marbleTeams) && Array.isArray(json.leagueTeams)) {
