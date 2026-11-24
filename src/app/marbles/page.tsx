@@ -16,7 +16,7 @@ function Medals({ g, s, b, small = false }: { g: number; s: number; b: number; s
   ] as const;
   return (
     <span className={`flex items-center ${small ? "gap-1.5" : "gap-2.5"}`}>
-      {items.filter(([n]) => !small || n > 0).map(([n, c, label]) => (
+      {items.map(([n, c, label]) => (
         <span key={label} className={`flex items-center ${small ? "gap-0.5" : "gap-1"} ${n === 0 ? "opacity-30" : ""}`} title={`${n} ${label}`}>
           <span className={`${small ? "h-2 w-2" : "h-3 w-3"} rounded-full`} style={{ background: c }} />
           <span className={`num font-semibold ${small ? "text-[13px]" : "text-[15px]"}`}>{n}</span>
