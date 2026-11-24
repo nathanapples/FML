@@ -55,15 +55,17 @@ The public pages are read-only; anything that changes data sits behind the admin
 
 ## Using it
 
-- **Fantasy Standings** (`/`): the leaderboard, season progress, the race chart (total points or league position), and the latest podium.
+- **Fantasy Teams** (`/`): the leaderboard, season progress, the race chart (total points or league position), and the latest podium.
 - **Events** (`/events`): every event and a results grid; each event has its own page with the finishing order and each league team's haul.
-- **Marble League** (`/marbles`): the real marble teams' standings, medals and which fantasy teams have each one, with a page per marble team.
+- **Marble Teams** (`/marbles`): the real marble teams' standings, medals and which fantasy teams have each one, with a page per marble team.
 - **Team pages** (`/teams/:id`): slots, trade history and an event-by-event breakdown.
+- **Players** (`/players`): the people behind the fantasy teams, with each player's teams, finishes and titles across every season.
 - **Admin** (`/admin`):
   - *Results*: tap marble teams in finishing order. Points come from the season's points table (25, 20, 15, 12 … 0 by default) and any of them can be edited.
   - *Events*: names, dates, wiki and video links, and whether each event counts toward league standings (untick it for races held before your draft).
   - *League teams*: names, managers, flags, draft order, picks and trades. A trade is "this slot holds this marble from event N".
   - *Marble teams*: colours (the marble is drawn from these), optional logo, wiki link, and which teams are competing this season.
+  - *Players*: rename players, add new ones, or merge duplicates. A fantasy team's Player field links it to a player; typing a new name creates one.
   - *Seasons and backup*: start a new season (optionally carrying over marble teams and managers), change the points table, download a full JSON backup, or restore one.
 
 ## How scoring works

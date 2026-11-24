@@ -23,8 +23,8 @@ export function LogoMarbles({ size = 20 }: { size?: number }) {
 }
 
 const NAV = [
-  { href: "/", label: "Fantasy Standings", short: "Fantasy" },
-  { href: "/marbles", label: "Marble League", short: "Marble League" },
+  { href: "/", label: "Fantasy Teams", short: "Fantasy" },
+  { href: "/marbles", label: "Marble Teams", short: "Marbles" },
   { href: "/events", label: "Events", short: "Events" },
 ];
 

@@ -10,6 +10,7 @@ export type TeamStanding = {
   id: number;
   name: string;
   manager: string;
+  playerId: number | null;
   flag: string | null;
   draftOrder: number | null;
   picks: Pick[];
@@ -125,7 +126,7 @@ export function loadSeason(season: SeasonRow): SeasonData {
   const pts = (eventNo: number, marbleId: number | undefined) =>
     marbleId == null ? 0 : results.get(eventNo)?.find((r) => r.marbleId === marbleId)?.points ?? 0;
 
-  const teamRows = d.prepare("SELECT * FROM league_teams WHERE season_id=? ORDER BY COALESCE(draft_order,999), name").all(season.id) as Record<string, unknown>[];
+  const teamRows = d.prepare("SELECT t.*, p.name AS player_name FROM league_teams t LEFT JOIN players p ON p.id = t.player_id WHERE t.season_id=? ORDER BY COALESCE(t.draft_order,999), t.name").all(season.id) as Record<string, unknown>[];
   const pickRows = d.prepare("SELECT p.* FROM picks p JOIN league_teams t ON t.id=p.league_team_id WHERE t.season_id=? ORDER BY slot, start_event").all(season.id) as Record<string, unknown>[];
 
   const teams: TeamStanding[] = teamRows.map((t, i) => {
@@ -153,7 +154,8 @@ export function loadSeason(season: SeasonRow): SeasonData {
     return {
       id: t.id as number,
       name: t.name as string,
-      manager: t.manager as string,
+      manager: ((t.player_name as string) || (t.manager as string)) ?? "",
+      playerId: (t.player_id as number) ?? null,
       flag: (t.flag as string) || null,
       draftOrder: (t.draft_order as number) ?? null,
       picks,

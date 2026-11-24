@@ -51,6 +51,10 @@ CREATE TABLE IF NOT EXISTS results (
   points INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (event_id, marble_id)
 );
+CREATE TABLE IF NOT EXISTS players (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE COLLATE NOCASE
+);
 CREATE TABLE IF NOT EXISTS league_teams (
   id INTEGER PRIMARY KEY,
   season_id INTEGER NOT NULL REFERENCES seasons(id) ON DELETE CASCADE,
@@ -93,6 +97,34 @@ export function db(): Database.Database {
 function migrate(d: Database.Database) {
   const cols = (d.prepare("PRAGMA table_info(events)").all() as { name: string }[]).map((c) => c.name);
   if (!cols.includes("counts")) d.exec("ALTER TABLE events ADD COLUMN counts INTEGER NOT NULL DEFAULT 1");
+  const teamCols = (d.prepare("PRAGMA table_info(league_teams)").all() as { name: string }[]).map((c) => c.name);
+  if (!teamCols.includes("player_id")) d.exec("ALTER TABLE league_teams ADD COLUMN player_id INTEGER REFERENCES players(id) ON DELETE SET NULL");
+  linkPlayers(d);
+}
+
+/** "Nathan (Level 7 Guide)" and "Nathan #1" are both Nathan. */
+export function playerName(manager: string) {
+  return manager.replace(/\(.*?\)/g, "").replace(/#\d+/g, "").replace(/\s+/g, " ").trim();
+}
+
+/** Finds a player by name (case-insensitive), creating one if needed. */
+export function findOrCreatePlayer(d: Database.Database, name: string): number | null {
+  const n = playerName(name);
+  if (!n) return null;
+  const row = d.prepare("SELECT id FROM players WHERE name = ? COLLATE NOCASE").get(n) as { id: number } | undefined;
+  return row ? row.id : Number(d.prepare("INSERT INTO players(name) VALUES(?)").run(n).lastInsertRowid);
+}
+
+/** Links every fantasy team that has a manager name but no player yet. Safe to run any time. */
+export function linkPlayers(d: Database.Database) {
+  const rows = d.prepare("SELECT id, manager FROM league_teams WHERE player_id IS NULL AND TRIM(manager) <> ''").all() as { id: number; manager: string }[];
+  if (!rows.length) return;
+  d.transaction(() => {
+    for (const r of rows) {
+      const pid = findOrCreatePlayer(d, r.manager);
+      if (pid) d.prepare("UPDATE league_teams SET player_id=? WHERE id=?").run(pid, r.id);
+    }
+  })();
 }
 
 export function getSetting(key: string, fallback = ""): string {
@@ -169,7 +201,9 @@ export function importSeason(d: Database.Database, s: SeasonFile): number {
     }
     return seasonId;
   });
-  return tx();
+  const id = tx();
+  linkPlayers(d);
+  return id;
 }
 
 function seed(d: Database.Database) {

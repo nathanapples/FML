@@ -1,4 +1,5 @@
 import { adminData } from "@/lib/admin";
+import { db } from "@/lib/db";
 import { AdminShell, NoSeason } from "@/components/admin/AdminShell";
 import { Submit } from "@/components/admin/Submit";
 import { Marble } from "@/components/Marble";
@@ -19,6 +20,7 @@ function MarbleSelect({ name, marbles, defaultValue, label }: { name: string; ma
 
 export default async function AdminTeams({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { season, seasons, data } = await adminData(searchParams);
+  const players = db().prepare("SELECT id, name FROM players ORDER BY name").all() as { id: number; name: string }[];
   if (!data) return <AdminShell active="/admin/teams" season={season} seasons={seasons}><NoSeason /></AdminShell>;
   const slots = Array.from({ length: data.season.slotsPerTeam }, (_, i) => i + 1);
   const teams = [...data.teams].sort((a, b) => (a.draftOrder ?? 999) - (b.draftOrder ?? 999) || a.name.localeCompare(b.name));
@@ -27,14 +29,17 @@ export default async function AdminTeams({ searchParams }: { searchParams: Promi
   return (
     <AdminShell active="/admin/teams" season={season} seasons={seasons}>
       <h1 className="font-display text-4xl font-bold">League teams</h1>
-      <p className="mb-6 mt-1 text-ink-soft">Everyone playing in {data.season.name}, their draft picks, and any trades. Tap a team to edit it.</p>
+      <p className="mb-6 mt-1 text-ink-soft">Everyone playing in {data.season.name}, their draft picks, and any trades. Tap a team to edit it. Typing an existing player's name links the team to them; a new name creates a player.</p>
 
+      <datalist id="player-names">
+        {players.map((p) => <option key={p.id} value={p.name} />)}
+      </datalist>
       <details className="mb-8 rounded-2xl bg-board p-5 open:shadow-sm">
         <summary className="cursor-pointer font-display text-xl font-semibold">Add a team</summary>
         <form action={saveTeam} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input type="hidden" name="seasonId" value={data.season.id} />
           <label><span className="mb-1 block text-sm text-ink-soft">Team name</span><input name="name" className="field" required /></label>
-          <label><span className="mb-1 block text-sm text-ink-soft">Manager</span><input name="manager" className="field" required /></label>
+          <label><span className="mb-1 block text-sm text-ink-soft">Player</span><input name="manager" list="player-names" autoComplete="off" className="field" required /></label>
           <label><span className="mb-1 block text-sm text-ink-soft">Draft order</span><input name="draftOrder" type="number" min={1} className="field" /></label>
           <label><span className="mb-1 block text-sm text-ink-soft">Flag image</span><input name="flag" type="file" accept="image/*" className="field" /></label>
           {slots.map((s) => (
@@ -63,7 +68,7 @@ export default async function AdminTeams({ searchParams }: { searchParams: Promi
               <input type="hidden" name="id" value={t.id} />
               <Flag src={t.flag} name={t.name} size={56} className="hidden md:block" />
               <label><span className="mb-1 block text-sm text-ink-soft">Team name</span><input name="name" defaultValue={t.name} className="field" required /></label>
-              <label><span className="mb-1 block text-sm text-ink-soft">Manager</span><input name="manager" defaultValue={t.manager} className="field" /></label>
+              <label><span className="mb-1 block text-sm text-ink-soft">Player</span><input name="manager" list="player-names" autoComplete="off" defaultValue={t.manager} className="field" /></label>
               <label><span className="mb-1 block text-sm text-ink-soft">Draft order</span><input name="draftOrder" type="number" min={1} defaultValue={t.draftOrder ?? ""} className="field" /></label>
               <div className="order-last md:order-none"><Submit>Save</Submit></div>
               <label className="md:col-start-2"><span className="mb-1 block text-sm text-ink-soft">Replace flag</span><input name="flag" type="file" accept="image/*" className="field text-sm" /></label>

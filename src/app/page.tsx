@@ -22,7 +22,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     <>
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <PageTitle title="Fantasy Standings" aside={<SeasonStrip data={data} q={q} />}>
+        <PageTitle title="Fantasy Teams" aside={<SeasonStrip data={data} q={q} />}>
           {completed.length === 0
             ? `${season.year} season, no events raced yet.`
             : done
@@ -34,6 +34,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
         </PageTitle>
 
         <Leaderboard data={data} q={q} />
+        <p className="mt-2 text-right text-sm"><Link href="/players" className="text-ink-soft underline decoration-frost underline-offset-4 hover:text-ink">Every player&apos;s history</Link></p>
 
         {completed.length > 0 && (
           <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 px-1 md:grid-cols-4">
@@ -58,8 +59,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
         )}
 
         <section className="mt-14">
-          <h2 className="font-display text-3xl font-bold tracking-tight">The race</h2>
-          <p className="mb-5 mt-1 text-ink-soft">Hover a team to follow its line. Click to pin a few for comparison.</p>
+          <h2 className="mb-4 font-display text-3xl font-bold tracking-tight">The race</h2>
           <div className="rounded-2xl bg-board p-4 sm:p-6">
             <RaceChart
               events={completed.map((e) => ({ no: e.no, name: e.name }))}

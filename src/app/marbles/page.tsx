@@ -35,7 +35,7 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
     <>
       <SiteHeader leagueName={leagueName} season={season} seasons={seasons} active="/marbles" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <PageTitle title="Marble League">{season.year} season, {marbleStandings.length} marble teams. Tap one for its full season.</PageTitle>
+        <PageTitle title="Marble Teams">{season.year} season, {marbleStandings.length} marble teams.</PageTitle>
         <ol className="overflow-hidden rounded-2xl bg-board">
           {marbleStandings.map((m) => {
             const owners = data.teams.filter((t) => t.current.some((c) => c?.id === m.marble.id));
@@ -53,7 +53,7 @@ export default async function MarblesPage({ searchParams }: { searchParams: Prom
                     <span className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-sm leading-snug text-ink-soft">
                       {owners.map((t) => (
                         <span key={t.id} className="inline-flex min-w-0 items-center gap-1.5">
-                          <Flag src={t.flag} name={t.name} size={16} className="rounded-[4px]" />
+                          <Flag src={t.flag} name={t.name} size={16} />
                           <span className="truncate">{t.name}</span>
                         </span>
                       ))}

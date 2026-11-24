@@ -22,12 +22,12 @@ export default async function TeamPage({ params, searchParams }: { params: Promi
     <>
       <SiteHeader leagueName={leagueName} season={data.season} seasons={seasons} active="/" />
       <main className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <Link href={`/${q}`} className="mt-6 inline-block text-sm text-ink-soft hover:text-ink">&larr; Standings</Link>
+        <Link href={`/${q}`} className="mt-6 inline-block text-sm text-ink-soft hover:text-ink">&larr; Fantasy Teams</Link>
         <header className="mt-4 flex flex-wrap items-center gap-6">
           <Flag src={t.flag} name={t.name} size={112} className="rounded-2xl shadow-[0_10px_30px_-12px_rgb(11_42_74_/_0.5)]" />
           <div className="min-w-0 flex-1">
             <h1 className="font-display text-4xl font-bold leading-none tracking-tight sm:text-5xl">{t.name}</h1>
-            <p className="mt-2 text-lg text-ink-soft">Managed by {t.manager}{t.draftOrder ? `, pick ${t.draftOrder} in the draft` : ""}</p>
+            <p className="mt-2 text-lg text-ink-soft">Managed by {t.playerId ? <Link href={`/players/${t.playerId}`} className="font-medium text-ink underline decoration-frost underline-offset-4 hover:decoration-blueline">{t.manager}</Link> : t.manager}{t.draftOrder ? `, pick ${t.draftOrder} in the draft` : ""}</p>
           </div>
           <dl className="flex gap-8">
             <div><dt className="text-sm text-ink-faint">Position</dt><dd className="num text-5xl font-bold leading-none">{ordinal(t.rank)}</dd></div>

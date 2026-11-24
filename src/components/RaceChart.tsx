@@ -10,10 +10,10 @@ export function RaceChart({ events, teams }: { events: { no: number; name: strin
   const [pinned, setPinned] = useState<Set<number>>(new Set());
 
   const rows = useMemo(() => {
-    const start: Record<string, number | string> = { label: "Start" };
+    const start: Record<string, number | string> = { label: "Start", tick: "" };
     teams.forEach((t) => (start[`t${t.id}`] = mode === "points" ? 0 : NaN));
     const r = events.map((e, i) => {
-      const row: Record<string, number | string> = { label: e.name, no: e.no };
+      const row: Record<string, number | string> = { label: e.name, tick: String(e.no), no: e.no };
       teams.forEach((t) => (row[`t${t.id}`] = mode === "points" ? t.running[i] : t.ranks[i]));
       return row;
     });
@@ -50,7 +50,7 @@ export function RaceChart({ events, teams }: { events: { no: number; name: strin
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={rows} margin={{ top: 8, right: 12, bottom: 4, left: -12 }}>
               <CartesianGrid stroke="#dfe8ee" vertical={false} />
-              <XAxis dataKey="label" tick={{ fontSize: 12, fill: "#4a6380" }} tickLine={false} axisLine={{ stroke: "#dfe8ee" }} interval="preserveStartEnd" minTickGap={8} />
+              <XAxis dataKey="tick" tick={{ fontSize: 12, fill: "#4a6380" }} tickLine={false} axisLine={{ stroke: "#dfe8ee" }} interval={0} />
               <YAxis
                 reversed={mode === "rank"}
                 domain={mode === "rank" ? [1, teams.length] : [0, "auto"]}
@@ -65,12 +65,12 @@ export function RaceChart({ events, teams }: { events: { no: number; name: strin
                 allowEscapeViewBox={{ x: false, y: true }}
                 wrapperStyle={{ zIndex: 20, maxWidth: "calc(100vw - 2rem)" }}
                 cursor={{ stroke: "#8aa0b4", strokeDasharray: "3 3" }}
-                content={({ active, payload, label }) => {
+                content={({ active, payload }) => {
                   if (!active || !payload?.length) return null;
                   const list = [...payload].sort((a, b) => (mode === "rank" ? Number(a.value) - Number(b.value) : Number(b.value) - Number(a.value)));
                   return (
                     <div className="w-[min(18rem,calc(100vw-3rem))] rounded-xl bg-ink/95 px-3 py-2 text-[13px] text-white shadow-xl">
-                      <div className="mb-1 font-display text-base font-semibold">{label}</div>
+                      <div className="mb-1 font-display text-base font-semibold">{String(payload[0]?.payload?.no ? `${payload[0].payload.no}. ` : "")}{String(payload[0]?.payload?.label ?? "")}</div>
                       {list.map((p) => {
                         const t = teams.find((x) => `t${x.id}` === p.dataKey)!;
                         return (

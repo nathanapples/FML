@@ -50,7 +50,11 @@ export function Leaderboard({ data, q }: { data: SeasonData; q: string }) {
                     </Link>
                     <span className="num flex-none text-[26px] font-bold leading-none sm:hidden">{t.total}</span>
                   </span>
-                  <span className="block truncate text-sm leading-tight text-ink-soft">{t.manager}</span>
+                  {t.playerId ? (
+                    <Link href={`/players/${t.playerId}`} className="relative z-10 block w-fit max-w-full truncate text-sm leading-tight text-ink-soft hover:text-ink hover:underline">{t.manager}</Link>
+                  ) : (
+                    <span className="block truncate text-sm leading-tight text-ink-soft">{t.manager}</span>
+                  )}
                   <span className="mt-1.5 flex flex-wrap items-center gap-1">
                     {t.current.map((m, k) => (
                       <span key={k} className="min-w-0" style={{ ["--i" as string]: i * season.slotsPerTeam + k }}>

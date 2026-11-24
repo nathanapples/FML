@@ -4,7 +4,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { db, FLAG_DIR, DEFAULT_POINTS, setSetting } from "@/lib/db";
+import { db, FLAG_DIR, DEFAULT_POINTS, setSetting, findOrCreatePlayer, playerName } from "@/lib/db";
 import { checkPassword, endSession, requireAdmin, startSession } from "@/lib/auth";
 import { importBackup } from "@/lib/backup";
 
@@ -109,15 +109,15 @@ export async function saveTeam(f: FormData) {
   const flag = await saveFlag(f);
   const id = optInt(f, "id");
   if (id) {
-    d.prepare("UPDATE league_teams SET name=?, manager=?, draft_order=?, flag=COALESCE(?, flag) WHERE id=?").run(
-      str(f, "name") || "Unnamed team", str(f, "manager"), optInt(f, "draftOrder"), flag, id
+    d.prepare("UPDATE league_teams SET name=?, manager=?, player_id=?, draft_order=?, flag=COALESCE(?, flag) WHERE id=?").run(
+      str(f, "name") || "Unnamed team", playerName(str(f, "manager")), findOrCreatePlayer(d, str(f, "manager")), optInt(f, "draftOrder"), flag, id
     );
     if (f.get("removeFlag") === "on") d.prepare("UPDATE league_teams SET flag=NULL WHERE id=?").run(id);
   } else {
     const sid = int(f, "seasonId");
     const newId = Number(
-      d.prepare("INSERT INTO league_teams(season_id,name,manager,draft_order,flag) VALUES(?,?,?,?,?)")
-        .run(sid, str(f, "name") || "Unnamed team", str(f, "manager"), optInt(f, "draftOrder"), flag).lastInsertRowid
+      d.prepare("INSERT INTO league_teams(season_id,name,manager,player_id,draft_order,flag) VALUES(?,?,?,?,?,?)")
+        .run(sid, str(f, "name") || "Unnamed team", playerName(str(f, "manager")), findOrCreatePlayer(d, str(f, "manager")), optInt(f, "draftOrder"), flag).lastInsertRowid
     );
     const slots = (d.prepare("SELECT slots_per_team s FROM seasons WHERE id=?").get(sid) as { s: number }).s;
     for (let s = 1; s <= slots; s++) {
@@ -145,6 +145,54 @@ export async function setPick(f: FormData) {
 export async function deletePick(f: FormData) {
   await requireAdmin();
   db().prepare("DELETE FROM picks WHERE id=?").run(int(f, "id"));
+  done();
+}
+
+/* ---------- players ---------- */
+
+export async function renamePlayer(f: FormData) {
+  await requireAdmin();
+  const d = db();
+  const id = int(f, "id");
+  const name = playerName(str(f, "name"));
+  if (!name) return;
+  const clash = d.prepare("SELECT id FROM players WHERE name = ? COLLATE NOCASE AND id <> ?").get(name, id) as { id: number } | undefined;
+  d.transaction(() => {
+    if (clash) {
+      // renaming onto an existing player merges the two
+      d.prepare("UPDATE league_teams SET player_id=?, manager=? WHERE player_id=?").run(clash.id, name, id);
+      d.prepare("DELETE FROM players WHERE id=?").run(id);
+    } else {
+      d.prepare("UPDATE players SET name=? WHERE id=?").run(name, id);
+      d.prepare("UPDATE league_teams SET manager=? WHERE player_id=?").run(name, id);
+    }
+  })();
+  done();
+}
+export async function mergePlayer(f: FormData) {
+  await requireAdmin();
+  const d = db();
+  const from = int(f, "id"), into = int(f, "into");
+  if (!into || from === into) return;
+  const name = (d.prepare("SELECT name FROM players WHERE id=?").get(into) as { name: string } | undefined)?.name;
+  if (!name) return;
+  d.transaction(() => {
+    d.prepare("UPDATE league_teams SET player_id=?, manager=? WHERE player_id=?").run(into, name, from);
+    d.prepare("DELETE FROM players WHERE id=?").run(from);
+  })();
+  done();
+}
+export async function addPlayer(f: FormData) {
+  await requireAdmin();
+  findOrCreatePlayer(db(), str(f, "name"));
+  done();
+}
+export async function deletePlayer(f: FormData) {
+  await requireAdmin();
+  const d = db();
+  const id = int(f, "id");
+  const used = (d.prepare("SELECT COUNT(*) c FROM league_teams WHERE player_id=?").get(id) as { c: number }).c;
+  if (used === 0) d.prepare("DELETE FROM players WHERE id=?").run(id);
   done();
 }
 

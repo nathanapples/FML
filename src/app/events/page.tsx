@@ -47,8 +47,7 @@ export default async function EventsPage({ searchParams }: { searchParams: Promi
           })}
         </ol>
 
-        <h2 className="mt-16 font-display text-3xl font-bold tracking-tight">Results grid</h2>
-        <p className="mb-5 mt-1 text-ink-soft">Points each marble team scored, darker for bigger hauls.</p>
+        <h2 className="mb-4 mt-16 font-display text-3xl font-bold tracking-tight">Results grid</h2>
         <div className="overflow-x-auto rounded-2xl bg-board">
           <table className="w-full border-collapse text-sm">
             <thead>

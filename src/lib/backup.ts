@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { db, FLAG_DIR, importSeason, type SeasonFile } from "./db";
+import { db, FLAG_DIR, importSeason, linkPlayers, type SeasonFile } from "./db";
 
-const TABLES = ["settings", "seasons", "marble_teams", "season_marbles", "events", "results", "league_teams", "picks"] as const;
+const TABLES = ["settings", "seasons", "marble_teams", "season_marbles", "events", "results", "players", "league_teams", "picks"] as const;
 
 function walk(dir: string, base = dir): string[] {
   if (!fs.existsSync(dir)) return [];
@@ -51,6 +51,7 @@ export function importBackup(json: Record<string, unknown>): number {
       d.prepare("INSERT OR REPLACE INTO settings(key,value) VALUES('seeded','1')").run();
     })();
     writeFlags(json.flags as Record<string, string> | undefined);
+    linkPlayers(d);
     return (json.seasons as unknown[]).length;
   }
   if (Array.isArray(json.marbleTeams) && Array.isArray(json.leagueTeams)) {
